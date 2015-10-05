@@ -1,0 +1,18 @@
+---
+driver:
+  name: vagrant
+  network:
+    - ["forwarded_port", {guest: 2375, host: 2375, host_ip: '127.0.0.1'}]
+    - ["forwarded_port", {guest: 3128, host: 3128, host_ip: '127.0.0.1'}]
+
+provisioner:
+  name: chef_zero
+  require_chef_omnibus: 12.4.3
+
+platforms:
+  - name: centos-7.1
+
+suites:
+  - name: kdh
+    run_list:
+      - recipe[kitchen-docker-host]

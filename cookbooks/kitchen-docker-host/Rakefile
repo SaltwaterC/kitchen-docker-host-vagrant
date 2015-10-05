@@ -1,0 +1,21 @@
+desc 'kitchen converge'
+task :default do
+  system 'kitchen converge'
+end
+
+desc 'kitchen verify'
+task :verify do
+  system 'kitchen verify'
+end
+
+desc 'kitchen verify && rubocop && foodcritic'
+task test: [:default, :verify] do
+  system 'rubocop'
+  system 'foodcritic .'
+end
+
+desc 'kitchen destroy and cleanup'
+task :clean do
+  system 'kitchen destroy'
+  rm_rf '.kitchen'
+end
