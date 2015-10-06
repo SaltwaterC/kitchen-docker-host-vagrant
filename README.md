@@ -79,3 +79,27 @@ provisioner:
 The only thing that doesn't seem to belong here is chef_omnibus_url. However, the Omnibus installer defaults to HTTPS, unless the URL to install.sh uses HTTP. This allows Squid to cache the Chef package which is quite large at ~40 MB.
 
 The whole configuration may be bit smater as in [this example](https://gist.github.com/fnichol/7551540).
+
+## Speed up the Kitchen file transfer
+
+By default, Test Kitchen with the kitchen-docker driver, uses SCP as transport backend. SCP is painfully slow for most of the tasks regarding file transfer to a Kitchen container. This cancels any speed gains from using containers instead of virtual machines provisioned by Vagrant. The rsync transport saves the day.
+
+```bash
+gem install kitchen-transport-rsync # or add it to your Gemfile
+```
+
+You need to install rsync inside the Kitchen container. These .kitchen.yml bits show you how to do it for Red Hat and Debian based distributions without a custom Dockerfile:
+
+```yml
+driver:
+  name: docker
+  provision_command:
+  - if [ -x /usr/bin/yum ]; then yum -y install rsync; fi; if [ -x /usr/bin/apt-get ]; then apt-get -y install rsync; fi
+
+transport:
+  name: rsync
+```
+
+While provision_command accepts an array, doing a one liner gets the job done in one stage instead of two, which makes the Kitchen provisioning to be bit faster. Also, the commands themselves need to be wrapped in if statements as a non-zero exit stops the provisioning (equivalent to a script running with set -e).
+
+kitchen-transport-rsync works with Test Kitchen 1.4.2, probably 1.4.x
