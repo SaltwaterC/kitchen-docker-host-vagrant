@@ -8,6 +8,11 @@ task :up do
   system 'vagrant up'
 end
 
+desc 'Runs "vagrant halt"'
+task :halt do
+  system 'vagrant halt'
+end
+
 desc 'Runs "vagrant destroy"'
 task :clean do
   system 'vagrant destroy -f'
