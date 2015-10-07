@@ -6,6 +6,7 @@ end
 
 include_recipe 'yum-epel::default'
 include_recipe 'yum::default'
+include_recipe 'selinux::default'
 
 yum_repository 'docker' do
   description 'Docker Project YUM repository'
@@ -50,4 +51,12 @@ end
   service serv do
     action [:enable, :start]
   end
+end
+
+selinux_state 'SELinux Disabled' do
+  action :disabled
+end
+
+execute 'reboot' do
+  only_if 'test -d /sys/fs/selinux'
 end

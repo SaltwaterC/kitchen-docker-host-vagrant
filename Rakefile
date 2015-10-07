@@ -45,7 +45,7 @@ end
 
 desc 'Packages the Vagrant box'
 task :package do
-  system 'vagrant package --output kitchen-docker-host-0.1.0.box'
+  system 'vagrant package --output kitchen-docker-host-0.1.1.box'
 end
 
 task default: [:rubocop]
