@@ -1,3 +1,5 @@
+ENV['PATH'] = '/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin'
+
 desc 'Runs "rubocop"'
 task :rubocop do
   system 'rubocop'
