@@ -1,0 +1,41 @@
+FROM ubuntu:15.04
+ENV TERM xterm
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN echo 'APT::Install-Recommends "0"; \n\
+APT::Get::Assume-Yes "true"; \n\
+APT::Get::force-yes "true"; \n\
+APT::Install-Suggests "0";' > /etc/apt/apt.conf.d/01buildconfig && \
+  apt-get clean && \
+  apt-get update && \
+  apt-get -y install sudo openssh-server lsb-release && \
+  # Cleanup systemd
+  cd /lib/systemd/system/sysinit.target.wants/; ls | grep -v systemd-tmpfiles-setup | xargs rm -f $1 \
+  rm -f /lib/systemd/system/multi-user.target.wants/*;\
+  rm -f /etc/systemd/system/*.wants/*;\
+  rm -f /lib/systemd/system/local-fs.target.wants/*; \
+  rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
+  rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
+  rm -f /lib/systemd/system/basic.target.wants/*;\
+  rm -f /lib/systemd/system/anaconda.target.wants/*; \
+  rm -f /lib/systemd/system/plymouth*; \
+  rm -f /lib/systemd/system/systemd-update-utmp* && \
+  systemctl set-default multi-user.target && \
+  # Enable SSH
+  systemctl enable ssh.service && \
+  # Setup kitchen user with passwordless sudo
+  useradd -d /home/kitchen -m -s /bin/bash kitchen && \
+  (echo kitchen:kitchen | chpasswd) && \
+  mkdir -p /etc/sudoers.d && \
+  echo 'kitchen ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/kitchen
+
+ENV init /sbin/init
+VOLUME ["/sys/fs/cgroup"]
+
+RUN apt-get -y install curl rsync && \
+  curl -L http://www.getchef.com/chef/install.sh -o /tmp/install.sh && \
+  bash /tmp/install.sh -v 12.4.3
+
+ENTRYPOINT ["/sbin/init"]
+CMD ["systemd.unit=emergency.service"]

@@ -133,3 +133,25 @@ provisioner:
   name: chef_zero
   require_chef_omnibus: true # just checks the presence of a Chef Omnibus installation instead of passing a Chef version
 ```
+
+## Thick containers for Docker
+
+Even though this isn't the usual use case, Docker is perfectly capable of running traditional containers (i.e. OpenVZ like). These thick containers behave more like a virtual machine, but they are very quick to provision unlike actual VM's.
+
+Some of the goals for these Dockerfile templates:
+
+ * Have an actual init system as PID 1.
+ * The init should actually start services inside the container. Sometimes, this may be rather difficult with upstart / systemd.
+ * Have a working SSH service. Even though it's not a hard dependency for Kitchen (you may [monkeypatch the driver to use docker exec](https://medium.com/brigade-engineering/reduce-chef-infrastructure-integration-test-times-by-75-with-test-kitchen-and-docker-bf638ab95a0a) instead), this service is available by default on virtually all cloud providers.
+ * The containers should respond to shutdown commands in a consistent way.
+ * Have all the basic bits baked into the images (rsync, Chef Omnibus).
+
+kitchen-docker supports custom Dockerfiles via the [dockerfile](https://github.com/portertech/kitchen-docker#dockerfile) driver configuration option.
+
+This is the list of supported distributions with these Dockerfiles:
+
+ * CentOS 6.7 (also useful for targeting Amazon Linux)
+ * Ubuntu 15.04
+ * Debian 8.2
+
+For systemd to work, it requires at least CAP_SYS_ADMIN. For the shutdown support to work, I had to run the containers in privileged mode. There's too much work to figure out an exact list of capabilities and there's no guarantee as privileged provides more privileges than enabling all the supported capabilities.

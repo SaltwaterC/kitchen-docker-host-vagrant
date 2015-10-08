@@ -1,0 +1,19 @@
+FROM centos:6.7
+ENV TERM xterm
+
+RUN yum clean all && \
+  yum -y install upstart sudo util-linux-ng openssh-server && \
+  # Setup kitchen user with passwordless sudo
+  useradd -d /home/kitchen -m -s /bin/bash kitchen && \
+  (echo kitchen:kitchen | chpasswd) && \
+  mkdir -p /etc/sudoers.d && \
+  echo 'kitchen ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/kitchen && \
+  # Generate the OpenSSH server keys
+  ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N '' && \
+  ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key -N ''
+
+RUN yum -y install curl rsync && \
+  curl -L http://www.getchef.com/chef/install.sh -o /tmp/install.sh && \
+  bash /tmp/install.sh -v 12.4.3
+
+CMD ["/sbin/init"]
