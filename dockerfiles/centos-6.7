@@ -10,10 +10,16 @@ RUN yum clean all && \
   echo 'kitchen ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/kitchen && \
   # Generate the OpenSSH server keys
   ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N '' && \
-  ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key -N ''
+  ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key -N '' && \
+  # Fix the hostname
+  printf "%s\n" '#!/bin/sh' 'hostname -F /etc/hostname' 'touch /var/lock/subsys/local' 'exit 0' > /etc/rc.local
 
+# setup passwordless ssh
+RUN su - kitchen -c 'mkdir /home/kitchen/.ssh && touch /home/kitchen/.ssh/authorized_keys' && \
+  chmod 700 /home/kitchen/.ssh && chmod 600 /home/kitchen/.ssh/authorized_keys && \
+  echo '<%= File.read(@public_key).strip %>' > /home/kitchen/.ssh/authorized_keys
+
+# setup the rsync transport and Chef Omnibus
 RUN yum -y install curl rsync && \
   curl -L http://www.getchef.com/chef/install.sh -o /tmp/install.sh && \
-  bash /tmp/install.sh -v 12.4.3
-
-CMD ["/sbin/init"]
+  bash /tmp/install.sh -v <%= @chef_version %>

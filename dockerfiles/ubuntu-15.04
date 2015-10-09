@@ -1,6 +1,8 @@
 FROM ubuntu:15.04
 ENV TERM xterm
 
+VOLUME ["/sys/fs/cgroup"]
+ENV init /sbin/init
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN echo 'APT::Install-Recommends "0"; \n\
@@ -28,14 +30,17 @@ APT::Install-Suggests "0";' > /etc/apt/apt.conf.d/01buildconfig && \
   useradd -d /home/kitchen -m -s /bin/bash kitchen && \
   (echo kitchen:kitchen | chpasswd) && \
   mkdir -p /etc/sudoers.d && \
-  echo 'kitchen ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/kitchen
+  echo 'kitchen ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/kitchen && \
+  # remove /run/nologin which prevents ssh authentication for non-root
+  ln -s /lib/systemd/system/rc-local.service /etc/systemd/system/multi-user.target.wants/rc-local.service && \
+  printf "%s\n" '#!/bin/sh' 'rm -f /run/nologin' 'exit 0' > /etc/rc.local
 
-ENV init /sbin/init
-VOLUME ["/sys/fs/cgroup"]
+# setup passwordless ssh
+RUN su - kitchen -c 'mkdir /home/kitchen/.ssh && touch /home/kitchen/.ssh/authorized_keys' && \
+  chmod 700 /home/kitchen/.ssh && chmod 600 /home/kitchen/.ssh/authorized_keys && \
+  echo '<%= File.read(@public_key).strip %>' > /home/kitchen/.ssh/authorized_keys
 
+# setup the rsync transport and Chef Omnibus
 RUN apt-get -y install curl rsync && \
   curl -L http://www.getchef.com/chef/install.sh -o /tmp/install.sh && \
-  bash /tmp/install.sh -v 12.4.3
-
-ENTRYPOINT ["/sbin/init"]
-CMD ["systemd.unit=emergency.service"]
+  bash /tmp/install.sh -v <%= @chef_version %>

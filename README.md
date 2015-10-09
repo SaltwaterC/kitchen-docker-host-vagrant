@@ -142,7 +142,7 @@ Some of the goals for these Dockerfile templates:
 
  * Have an actual init system as PID 1.
  * The init should actually start services inside the container. Sometimes, this may be rather difficult with upstart / systemd.
- * Have a working SSH service. Even though it's not a hard dependency for Kitchen (you may [monkeypatch the driver to use docker exec](https://medium.com/brigade-engineering/reduce-chef-infrastructure-integration-test-times-by-75-with-test-kitchen-and-docker-bf638ab95a0a) instead), this service is available by default on virtually all cloud providers.
+ * Have a working SSH service.
  * The containers should respond to shutdown commands in a consistent way.
  * Have all the basic bits baked into the images (rsync, Chef Omnibus).
 
@@ -155,3 +155,61 @@ This is the list of supported distributions with these Dockerfiles:
  * Debian 8.2
 
 For systemd to work, it requires at least CAP_SYS_ADMIN. For the shutdown support to work, I had to run the containers in privileged mode. There's too much work to figure out an exact list of capabilities and there's no guarantee as privileged provides more privileges than enabling all the supported capabilities.
+
+The Dockerfiles are ERB templates which are rendered by kitchen-docker. There's a couple of variables:
+
+ * public_key - kitchen-docker already has this defined, whether you're using the generated keys or you're using static keys
+ * chef_version
+
+chef_version by itself isn't defined in kitchen-docker, but the ERB context includes all the variables passed to the driver config, therefore you have a lot of flexibility.
+
+Example:
+
+```yml
+driver:
+  name: docker
+  chef_version: 12.4.3
+
+platforms:
+- name: centos-6.7
+  driver_config:
+    dockerfile: "../centos-6.7"
+```
+
+For a development machine, I use Docker in a VM even for a host that supports it natively, therefore the SSH inside the container *is* a hard dependency. The reason for this statement is the fact that the volumes feature essentially provide [root access to the host](http://reventlov.com/advisories/using-the-docker-command-to-root-the-host) for all the users who have access to the Docker socket.
+
+## Monkey-patching the docker driver
+
+[This article](https://medium.com/brigade-engineering/reduce-chef-infrastructure-integration-test-times-by-75-with-test-kitchen-and-docker-bf638ab95a0a) explains the basics of speeding up kitchen-docker. Even though patching the driver isn't necessary, docker exec is much faster than SSH, and the containers are removed in a clean way. I think Docker got better regarding the resource leaks, but I wouldn't put that to the test.
+
+```ruby
+require 'kitchen/driver/docker'
+
+module Kitchen
+  module Driver
+    class Docker < Kitchen::Driver::SSHBase
+      # monkey-patch kitchen login to use docker exec instead of ssh
+      def login_command(state)
+        LoginCommand.new 'docker', ['exec', '-it', state[:container_id], 'su', '-', 'kitchen']
+      end
+
+      # monkey-patch kitchen destroy
+      def rm_container(state)
+        cont_id = state[:container_id]
+        docker_command "exec #{cont_id} poweroff"
+        docker_command "wait #{cont_id}"
+        docker_command "rm #{cont_id}"
+      end
+    end
+  end
+end
+```
+
+It can be easily loaded with something like:
+
+```yml
+# <% load "#{File.dirname(__FILE__)}/../kitchen_docker.rb" %>
+---
+driver:
+  name: docker
+```
