@@ -1,6 +1,8 @@
 FROM centos:6.7
 ENV TERM xterm
 
+ENV container docker
+
 RUN yum clean all && \
   yum -y install upstart sudo util-linux-ng openssh-server && \
   # Setup kitchen user with passwordless sudo
@@ -12,7 +14,9 @@ RUN yum clean all && \
   ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N '' && \
   ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key -N '' && \
   # Fix the hostname
-  printf "%s\n" '#!/bin/sh' 'hostname -F /etc/hostname' 'touch /var/lock/subsys/local' 'exit 0' > /etc/rc.local
+  printf "%s\n" '#!/bin/sh' 'hostname -F /etc/hostname' 'touch /var/lock/subsys/local' 'exit 0' > /etc/rc.local && \
+  # Stop the mingetty spawn
+  rm -f /etc/init/tty.conf && rm -f /etc/init/start-ttys.conf
 
 # setup passwordless ssh
 RUN su - kitchen -c 'mkdir /home/kitchen/.ssh && touch /home/kitchen/.ssh/authorized_keys' && \

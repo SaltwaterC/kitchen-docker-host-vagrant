@@ -1,6 +1,8 @@
 FROM ubuntu:15.04
 ENV TERM xterm
 
+ENV container docker
+
 VOLUME ["/sys/fs/cgroup"]
 ENV init /sbin/init
 ENV DEBIAN_FRONTEND noninteractive

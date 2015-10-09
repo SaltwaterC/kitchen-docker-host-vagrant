@@ -1,6 +1,8 @@
 FROM debian:8.2
 ENV TERM xterm
 
+ENV container docker
+
 VOLUME ["/sys/fs/cgroup"]
 ENV init /sbin/init
 ENV DEBIAN_FRONTEND noninteractive
@@ -30,8 +32,8 @@ APT::Install-Suggests "0";' > /etc/apt/apt.conf.d/01buildconfig && \
   useradd -d /home/kitchen -m -s /bin/bash kitchen && \
   (echo kitchen:kitchen | chpasswd) && \
   mkdir -p /etc/sudoers.d && \
-  echo 'kitchen ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/kitchen && \
   # remove /run/nologin which prevents ssh authentication for non-root
+  echo 'kitchen ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/kitchen && \
   printf "%s\n" '#!/bin/sh' 'rm -f /run/nologin' 'exit 0' > /etc/rc.local
 
 # setup passwordless ssh
