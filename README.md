@@ -213,3 +213,30 @@ It can be easily loaded with something like:
 driver:
   name: docker
 ```
+
+## How to turn your Test Kitchen into a fast-food joint
+
+Having complex cookbooks with multiple code paths to test means you have to declare multiple test suites. Same applies if you target multiple platforms where you're looking for consistency. The issue is that by default Test Kitchen runs everything sequentially, therefore it means you don't get any benefit from a multi-core CPU.
+
+Test Kitchen also supports a concurrent mode, but Unfortunately this isn't documented in a very visible way. Going at ludicrous speed is easy as the only thing you need to do is to pass the "-c" flag.
+
+Example:
+
+```bash
+kitchen create -c
+kitchen converge -c
+kitchen verify -c
+kitchen destroy -c
+```
+
+By default, the concurrency limit is at 9999 which is a reasonable value given the fact that it's unlikely to have so many cores. The concurrency flag accepts a numeric value to indicate the number of threads to run if the number of instances is too large for your CPU to handle.
+
+The only drawback of the concurrent mode is the fact that the console output becomes virtually unreadable. However, the logs from .kitchen/logs are really valuable in this case and you may run a single suite at any point.
+
+Example:
+
+```bash
+# run only the 'default' suite
+kitchen converge default
+kitchen verify default
+```
