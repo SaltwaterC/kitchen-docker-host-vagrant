@@ -42,17 +42,4 @@ task :provision do
   system 'vagrant provision'
 end
 
-desc 'Purges the Vagrant box'
-task :purge do
-  system 'vagrant ssh -c "sudo purge"'
-end
-
-desc 'Packages the Vagrant box'
-task :package do
-  system 'vagrant package --output kitchen-docker-host-0.1.1.box'
-end
-
 task default: [:rubocop]
-
-desc 'Does a Kitchen Docker Host Vagrant box release'
-task release: [:up, :purge, :package]
