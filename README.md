@@ -18,7 +18,9 @@ vagrant plugin install vagrant-berkshelf
 
 ## How to use
 
-For starting the VM, simply issue a `vagrant up` command in the root directory of this project. By default, it uses 4 virtual cores and 8192 GB of RAM. You may either edit the supplied Vagrantfile or export VB_CPUS and / or VB_MEM environment variables with the desired values.
+For starting the VM, simply issue a `vagrant up` command in the root directory of this project. If you want to use the bundled Rake tasks, you'll need to run `bundle install` first.
+
+By default, it uses 4 virtual cores and 8192 GB of RAM. You may either edit the supplied Vagrantfile or export VB_CPUS and / or VB_MEM environment variables with the desired values.
 
 The VM itself uses a host-only network adapter with the IP address 192.168.99.100. This makes it sort of a drop-in replacement for docker-machine. The Docker socket isn't TLS enabled though.
 
