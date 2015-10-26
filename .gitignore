@@ -1,3 +1,4 @@
 *.box
 .vagrant/
 .kitchen/
+Gemfile.lock

@@ -1,4 +1,6 @@
-ENV['PATH'] = '/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin'
+require 'os'
+
+ENV['PATH'] = '/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin' unless OS.windows?
 
 desc 'Runs "rubocop"'
 task :rubocop do
