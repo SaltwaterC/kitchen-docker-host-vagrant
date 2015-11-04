@@ -17,13 +17,9 @@ end
 pkg = %w(
   htop
   squid
+  docker-engine
 )
 package pkg
-
-# docker 1.9.0 has really slow networking
-package 'docker-engine' do
-  version '1.8.3-1.el7.centos'
-end
 
 execute 'systemctl daemon-reload' do
   action :nothing

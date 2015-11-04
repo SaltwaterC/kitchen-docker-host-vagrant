@@ -9,6 +9,8 @@ Vagrant.configure(2) do |config|
     vb.name = 'kitchen-docker-host'
     vb.cpus = ENV['VB_CPUS'] || 4
     vb.memory = ENV['VB_MEM'] || 8192
+    vb.customize ['modifyvm', :id, '--nictype1', 'virtio']
+    vb.customize ['modifyvm', :id, '--nictype2', 'virtio']
   end
 
   config.vm.network 'private_network', ip: '192.168.99.100'
