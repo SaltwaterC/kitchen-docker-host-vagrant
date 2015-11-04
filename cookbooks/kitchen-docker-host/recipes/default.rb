@@ -6,7 +6,6 @@ end
 
 include_recipe 'yum-epel::default'
 include_recipe 'yum::default'
-include_recipe 'selinux::default'
 
 yum_repository 'docker' do
   description 'Docker Project YUM repository'
