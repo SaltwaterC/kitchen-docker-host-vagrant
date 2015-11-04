@@ -14,12 +14,15 @@ yum_repository 'docker' do
   action :create
 end
 
-%w(
+pkg = %w(
   htop
-  docker-engine
   squid
-).each do |pkg|
-  package pkg
+)
+package pkg
+
+# docker 1.9.0 has really slow networking
+package 'docker-engine' do
+  version '1.8.3-1.el7.centos'
 end
 
 execute 'systemctl daemon-reload' do
