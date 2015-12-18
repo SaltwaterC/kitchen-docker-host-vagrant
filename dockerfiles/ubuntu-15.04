@@ -43,6 +43,6 @@ RUN su - kitchen -c 'mkdir /home/kitchen/.ssh && touch /home/kitchen/.ssh/author
   echo '<%= File.read(@public_key).strip %>' > /home/kitchen/.ssh/authorized_keys
 
 # setup the rsync transport and Chef Omnibus
-RUN apt-get -y install curl rsync && \
-  curl -L http://www.getchef.com/chef/install.sh -o /tmp/install.sh && \
+RUN apt-get -y install curl rsync ca-certificates && \
+  curl -L http://www.opscode.com/chef/install.sh -o /tmp/install.sh && \
   bash /tmp/install.sh -v <%= @chef_version %>

@@ -25,5 +25,5 @@ RUN su - kitchen -c 'mkdir /home/kitchen/.ssh && touch /home/kitchen/.ssh/author
 
 # setup the rsync transport and Chef Omnibus
 RUN yum -y install curl rsync && \
-  curl -L http://www.getchef.com/chef/install.sh -o /tmp/install.sh && \
+  curl -L http://www.opscode.com/chef/install.sh -o /tmp/install.sh && \
   bash /tmp/install.sh -v <%= @chef_version %>

@@ -73,14 +73,14 @@ driver:
   http_proxy: http://192.168.99.100:3128
 
 provisioner:
-  chef_omnibus_url: http://www.chef.io/chef/install.sh
+  chef_omnibus_url: http://www.opscode.com/chef/install.sh
   client_rb:
     http_proxy: http://192.168.99.100:3128
 ```
 
 The only thing that doesn't seem to belong here is chef_omnibus_url. However, the Omnibus installer defaults to HTTPS, unless the URL to install.sh uses HTTP. This allows Squid to cache the Chef package which is quite large at ~40 MB.
 
-The whole configuration may be bit smater as in [this example](https://gist.github.com/fnichol/7551540).
+The whole configuration may be bit smarter as in [this example](https://gist.github.com/fnichol/7551540).
 
 ## Speed up the Kitchen file transfer
 
@@ -129,7 +129,7 @@ Example:
 driver:
   name: docker
   provision_command:
-    - curl -L http://www.getchef.com/chef/install.sh -o /tmp/install.sh && bash /tmp/install.sh -v 12.4.3
+    - curl -L http://www.opscode.com/chef/install.sh -o /tmp/install.sh && bash /tmp/install.sh -v 12.5.1
 
 provisioner:
   name: chef_zero
@@ -170,7 +170,7 @@ Example:
 ```yml
 driver:
   name: docker
-  chef_version: 12.4.3
+  chef_version: 12.5.1
 
 platforms:
 - name: centos-6.7
