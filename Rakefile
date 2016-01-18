@@ -21,7 +21,7 @@ desc 'Runs "vagrant destroy"'
 task :clean do
   system 'vagrant destroy -f'
   rm_rf '.vagrant'
-  rm_f 'vagrant-*.json'
+  rm_f Dir['vagrant-*.json']
 end
 
 desc 'Runs "vagrant ssh"'
