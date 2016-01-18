@@ -16,7 +16,8 @@ Vagrant.configure(2) do |config|
   config.vm.network 'private_network', ip: '192.168.99.100'
 
   config.vm.provision 'chef_zero' do |chef|
-    chef.version = '12.5.1'
+    chef.version = '12.6.0'
     chef.add_recipe 'kitchen-docker-host'
+    chef.nodes_path = '.'
   end
 end

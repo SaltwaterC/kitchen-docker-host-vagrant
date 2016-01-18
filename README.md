@@ -36,20 +36,24 @@ To check that the Docker connection is OK:
 docker info
 Containers: 0
 Images: 0
+Server Version: 1.9.1
 Storage Driver: devicemapper
- Pool Name: docker-253:0-68062095-pool
+ Pool Name: docker-253:0-465857-pool
  Pool Blocksize: 65.54 kB
- Backing Filesystem: xfs
+ Base Device Size: 107.4 GB
+ Backing Filesystem:
  Data file: /dev/loop0
  Metadata file: /dev/loop1
- Data Space Used: 1.821 GB
+ Data Space Used: 53.74 MB
  Data Space Total: 107.4 GB
- Data Space Available: 38.24 GB
- Metadata Space Used: 1.479 MB
+ Data Space Available: 39.98 GB
+ Metadata Space Used: 606.2 kB
  Metadata Space Total: 2.147 GB
- Metadata Space Available: 2.146 GB
+ Metadata Space Available: 2.147 GB
  Udev Sync Supported: true
  Deferred Removal Enabled: false
+ Deferred Deletion Enabled: false
+ Deferred Deleted Device Count: 0
  Data loop file: /var/lib/docker/devicemapper/devicemapper/data
  Metadata loop file: /var/lib/docker/devicemapper/devicemapper/metadata
  Library Version: 1.02.93-RHEL7 (2015-01-28)
@@ -57,10 +61,10 @@ Execution Driver: native-0.2
 Logging Driver: json-file
 Kernel Version: 3.10.0-229.el7.x86_64
 Operating System: CentOS Linux 7 (Core)
-CPUs: 2
-Total Memory: 993.2 MiB
+CPUs: 6
+Total Memory: 7.64 GiB
 Name: kitchen-docker-host
-ID: 77ZQ:24HX:YGI2:ETAX:GTED:ZEO3:35XE:XS7I:S3WN:6UTT:7ZLI:SAAS
+ID: VF6F:PHU7:T7JW:UO2D:TBDQ:B5RK:L7BI:WIV4:2PI4:FBWA:OWLW:IMTK
 ```
 
 To use it with Test Kitchen, you need to install the kitchen-docker gem and to specify docker as Kitchen driver.
@@ -129,7 +133,7 @@ Example:
 driver:
   name: docker
   provision_command:
-    - curl -L http://www.opscode.com/chef/install.sh -o /tmp/install.sh && bash /tmp/install.sh -v 12.5.1
+    - curl -L http://www.opscode.com/chef/install.sh -o /tmp/install.sh && bash /tmp/install.sh -v 12.6.0
 
 provisioner:
   name: chef_zero
@@ -170,7 +174,7 @@ Example:
 ```yml
 driver:
   name: docker
-  chef_version: 12.5.1
+  chef_version: 12.6.0
 
 platforms:
 - name: centos-6.7

@@ -2,3 +2,4 @@
 .vagrant/
 .kitchen/
 Gemfile.lock
+vagrant-*.json
