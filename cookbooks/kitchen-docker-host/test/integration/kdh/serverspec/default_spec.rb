@@ -15,7 +15,7 @@ describe 'kitchen-docker-host::default' do
     it { is_expected.to be_owned_by 'root' }
     it { is_expected.to be_grouped_into 'root' }
     it { is_expected.to be_mode '644' }
-    it { is_expected.to contain 'docker daemon -H tcp://0.0.0.0:2375' }
+    it { is_expected.to contain 'ExecStart=/usr/bin/docker daemon --host=tcp://0.0.0.0:2375 --bip=172.17.42.1/16' }
   end
 
   describe file('/etc/squid/squid.conf') do
@@ -23,7 +23,7 @@ describe 'kitchen-docker-host::default' do
     it { is_expected.to be_owned_by 'root' }
     it { is_expected.to be_grouped_into 'root' }
     it { is_expected.to be_mode '644' }
-    it { is_expected.to contain 'maximum_object_size 1 GB' }
+    it { is_expected.to contain 'maximum_object_size 1024 MB' }
     it { is_expected.to contain 'cache_dir ufs /var/spool/squid 4096 16 256' }
     it { is_expected.to contain 'http_access allow all' }
     it { is_expected.to contain 'http_port 3128' }
