@@ -5,7 +5,7 @@ Docker host as Vagrant box created with [kitchen-docker](https://github.com/port
 ## Dependencies
 
  * [VirtualBox](https://www.virtualbox.org)
- * [Vagrant](https://www.vagrantup.com)
+ * [Vagrant](https://www.vagrantup.com) 1.8+
  * [ChefDK](https://downloads.chef.io/chef-dk/)
  * [vagrant-berkshelf](https://github.com/berkshelf/vagrant-berkshelf)
  * [Docker](https://www.docker.com) client
@@ -15,6 +15,8 @@ The vagrant-berkshelf plugin may be easily installed with:
 ```bash
 vagrant plugin install vagrant-berkshelf
 ```
+
+Vagrant 1.8+ is required as nodes_path is now a requirement for chef_zero provisioner. This makes the chef_zero provisioner to be backwards incompatible while the declaration of nodes_path keeps it from being forward compatible. The supplied Vagrantfile requires bit of work to make it compatible with 1.7.x and below.
 
 ## How to use
 
