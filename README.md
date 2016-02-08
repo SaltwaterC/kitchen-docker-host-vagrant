@@ -38,18 +38,18 @@ To check that the Docker connection is OK:
 docker info
 Containers: 0
 Images: 0
-Server Version: 1.9.1
+Server Version: 1.10.0
 Storage Driver: devicemapper
- Pool Name: docker-253:0-465857-pool
+ Pool Name: docker-253:0-660853-pool
  Pool Blocksize: 65.54 kB
- Base Device Size: 107.4 GB
- Backing Filesystem:
+ Base Device Size: 10.74 GB
+ Backing Filesystem: xfs
  Data file: /dev/loop0
  Metadata file: /dev/loop1
- Data Space Used: 53.74 MB
+ Data Space Used: 11.8 MB
  Data Space Total: 107.4 GB
- Data Space Available: 39.98 GB
- Metadata Space Used: 606.2 kB
+ Data Space Available: 39.93 GB
+ Metadata Space Used: 581.6 kB
  Metadata Space Total: 2.147 GB
  Metadata Space Available: 2.147 GB
  Udev Sync Supported: true
@@ -58,15 +58,15 @@ Storage Driver: devicemapper
  Deferred Deleted Device Count: 0
  Data loop file: /var/lib/docker/devicemapper/devicemapper/data
  Metadata loop file: /var/lib/docker/devicemapper/devicemapper/metadata
- Library Version: 1.02.93-RHEL7 (2015-01-28)
+ Library Version: 1.02.107-RHEL7 (2015-10-14)
 Execution Driver: native-0.2
 Logging Driver: json-file
-Kernel Version: 3.10.0-229.el7.x86_64
+Kernel Version: 3.10.0-327.el7.x86_64
 Operating System: CentOS Linux 7 (Core)
 CPUs: 6
 Total Memory: 7.64 GiB
 Name: kitchen-docker-host
-ID: VF6F:PHU7:T7JW:UO2D:TBDQ:B5RK:L7BI:WIV4:2PI4:FBWA:OWLW:IMTK
+ID: 7O6P:Y5LV:AFXB:X2ZE:NRRC:ZI7A:Z4YY:E2QO:3KYC:DDP4:U4PT:TZS2
 ```
 
 To use it with Test Kitchen, you need to install the kitchen-docker gem and to specify docker as Kitchen driver.
