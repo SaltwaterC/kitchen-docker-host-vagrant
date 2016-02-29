@@ -6,7 +6,7 @@ Requires=docker.socket
 
 [Service]
 Type=notify
-ExecStart=/usr/bin/docker daemon --host=tcp://0.0.0.0:2375 --bip=172.17.42.1/16
+ExecStart=/usr/bin/docker daemon --host=tcp://0.0.0.0:2375 --bip=172.17.42.1/16 --storage-opt dm.basesize=20G
 MountFlags=slave
 LimitNOFILE=1048576
 LimitNPROC=1048576
