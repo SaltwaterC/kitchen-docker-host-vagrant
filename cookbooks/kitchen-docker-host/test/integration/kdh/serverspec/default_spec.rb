@@ -18,7 +18,7 @@ describe 'kitchen-docker-host::default' do
 
     it do
       is_expected.to contain 'ExecStart=/usr/bin/docker daemon --host=tcp://0.0.0.0:2375 '\
-      '--bip=172.17.42.1/16 --storage-opt dm.basesize=20G'
+      '--bip=172.17.42.1/16 --storage-driver=overlay'
     end
   end
 
