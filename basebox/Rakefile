@@ -1,0 +1,16 @@
+desc 'vagrant up'
+task :up do
+  system 'vagrant up'
+end
+
+desc 'Package base box'
+task :package do
+  system 'vagrant package --output centos7.box'
+end
+
+desc 'Destroy box, remove build artifacts'
+task :clean do
+  system 'vagrant destroy -f'
+  rm_rf '.vagrant'
+  rm_f 'centos7.box'
+end

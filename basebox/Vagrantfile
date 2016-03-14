@@ -1,0 +1,17 @@
+vb_version = '5.0.16'
+
+Vagrant.configure(2) do |config|
+  config.vm.box = 'centos/7'
+  config.vm.provision 'shell', inline: <<-EOF
+    yum -y groupinstall Core
+    yum -y install gcc make kernel-headers kernel-devel-`uname -r`
+    curl http://download.virtualbox.org/virtualbox/#{vb_version}/VBoxGuestAdditions_#{vb_version}.iso -o /tmp/vb.iso
+    mount -o loop /tmp/vb.iso /mnt
+    sh /mnt/VBoxLinuxAdditions.run
+    umount /mnt
+    rm -f /tmp/vb.iso
+    yum -y erase gcc make kernel-headers kernel-devel-`uname -r`
+    yum -y clean all
+    rm -f /etc/ssh/ssh_host_*
+  EOF
+end
