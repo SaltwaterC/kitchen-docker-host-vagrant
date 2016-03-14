@@ -17,8 +17,9 @@ describe 'kitchen-docker-host::default' do
     it { is_expected.to be_mode '644' }
 
     it do
-      is_expected.to contain 'ExecStart=/usr/bin/docker daemon --host=tcp://0.0.0.0:2375 '\
-      '--bip=172.17.42.1/16 --storage-driver=overlay'
+      is_expected.to contain 'ExecStart=/usr/bin/docker daemon '\
+      '--host=tcp://0.0.0.0:2375 '\
+      '--bip=172.17.42.1/16'
     end
   end
 
