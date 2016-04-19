@@ -37,10 +37,13 @@ To check that the Docker connection is OK:
 ```bash
 docker info
 Containers: 0
+ Running: 0
+ Paused: 0
+ Stopped: 0
 Images: 0
-Server Version: 1.10.0
+Server Version: 1.11.0
 Storage Driver: devicemapper
- Pool Name: docker-253:0-660853-pool
+ Pool Name: docker-253:0-663845-pool
  Pool Blocksize: 65.54 kB
  Base Device Size: 10.74 GB
  Backing Filesystem: xfs
@@ -48,7 +51,7 @@ Storage Driver: devicemapper
  Metadata file: /dev/loop1
  Data Space Used: 11.8 MB
  Data Space Total: 107.4 GB
- Data Space Available: 39.93 GB
+ Data Space Available: 39.84 GB
  Metadata Space Used: 581.6 kB
  Metadata Space Total: 2.147 GB
  Metadata Space Available: 2.147 GB
@@ -57,16 +60,26 @@ Storage Driver: devicemapper
  Deferred Deletion Enabled: false
  Deferred Deleted Device Count: 0
  Data loop file: /var/lib/docker/devicemapper/devicemapper/data
+ WARNING: Usage of loopback devices is strongly discouraged for production use. Either use `--storage-opt dm.thinpooldev` or use `--storage-opt dm.no_warn_on_loop_devices=true` to suppress this warning.
  Metadata loop file: /var/lib/docker/devicemapper/devicemapper/metadata
  Library Version: 1.02.107-RHEL7 (2015-10-14)
-Execution Driver: native-0.2
 Logging Driver: json-file
+Cgroup Driver: cgroupfs
+Plugins:
+ Volume: local
+ Network: bridge null host
 Kernel Version: 3.10.0-327.el7.x86_64
 Operating System: CentOS Linux 7 (Core)
-CPUs: 6
+OSType: linux
+Architecture: x86_64
+CPUs: 4
 Total Memory: 7.64 GiB
 Name: kitchen-docker-host
-ID: 7O6P:Y5LV:AFXB:X2ZE:NRRC:ZI7A:Z4YY:E2QO:3KYC:DDP4:U4PT:TZS2
+ID: UMSH:JPZS:I4K6:GOWP:IVF7:Z424:Q2LI:MJTY:VB7N:2YJD:TSNE:JV4Q
+Docker Root Dir: /var/lib/docker
+Debug mode (client): false
+Debug mode (server): false
+Registry: https://index.docker.io/v1/
 ```
 
 To use it with Test Kitchen, you need to install the kitchen-docker gem and to specify docker as Kitchen driver.
@@ -135,7 +148,7 @@ Example:
 driver:
   name: docker
   provision_command:
-    - curl -L http://www.opscode.com/chef/install.sh -o /tmp/install.sh && bash /tmp/install.sh -v 12.7.2
+    - curl -L http://www.opscode.com/chef/install.sh -o /tmp/install.sh && bash /tmp/install.sh -v 12.8.1
 
 provisioner:
   name: chef_zero
@@ -176,7 +189,7 @@ Example:
 ```yml
 driver:
   name: docker
-  chef_version: 12.7.2
+  chef_version: 12.8.1
 
 platforms:
 - name: centos-6.7
