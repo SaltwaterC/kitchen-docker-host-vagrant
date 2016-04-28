@@ -45,8 +45,11 @@ end
 
 desc 'Clears the Squid cache'
 task :clear do
-  system 'vagrant ssh -c "sudo service squid stop && '\
-  'sudo rm -rf /var/spool/squid/* && sudo squid -z && sudo service squid start"'
+  system 'vagrant ssh -c "sudo service squid stop && sleep 5 && '\
+  'sudo rm -rf /var/spool/squid && '\
+  'sudo mkdir /var/spool/squid && '\
+  'sudo chown squid:squid /var/spool/squid && '\
+  'sudo squid -z && sleep 5 && sudo service squid start"'
 end
 
 task default: [:rubocop]
