@@ -41,9 +41,9 @@ Containers: 0
  Paused: 0
  Stopped: 0
 Images: 0
-Server Version: 1.11.0
+Server Version: 1.11.1
 Storage Driver: devicemapper
- Pool Name: docker-253:0-663845-pool
+ Pool Name: docker-253:0-664575-pool
  Pool Blocksize: 65.54 kB
  Base Device Size: 10.74 GB
  Backing Filesystem: xfs
@@ -51,7 +51,7 @@ Storage Driver: devicemapper
  Metadata file: /dev/loop1
  Data Space Used: 11.8 MB
  Data Space Total: 107.4 GB
- Data Space Available: 39.84 GB
+ Data Space Available: 39.85 GB
  Metadata Space Used: 581.6 kB
  Metadata Space Total: 2.147 GB
  Metadata Space Available: 2.147 GB
@@ -75,7 +75,7 @@ Architecture: x86_64
 CPUs: 4
 Total Memory: 7.64 GiB
 Name: kitchen-docker-host
-ID: UMSH:JPZS:I4K6:GOWP:IVF7:Z424:Q2LI:MJTY:VB7N:2YJD:TSNE:JV4Q
+ID: LGYI:UZT6:G6V4:KQ6X:ISH5:ENN2:OFL5:XW75:H7VZ:L5G3:Y3MD:3RZD
 Docker Root Dir: /var/lib/docker
 Debug mode (client): false
 Debug mode (server): false
@@ -148,7 +148,7 @@ Example:
 driver:
   name: docker
   provision_command:
-    - curl -L http://www.opscode.com/chef/install.sh -o /tmp/install.sh && bash /tmp/install.sh -v 12.8.1
+    - curl -L http://www.opscode.com/chef/install.sh -o /tmp/install.sh && bash /tmp/install.sh -v 12.9.41
 
 provisioner:
   name: chef_zero
@@ -189,7 +189,7 @@ Example:
 ```yml
 driver:
   name: docker
-  chef_version: 12.8.1
+  chef_version: 12.9.41
 
 platforms:
 - name: centos-6.7

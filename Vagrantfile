@@ -1,6 +1,6 @@
 Vagrant.require_version '>= 1.8.0'
 Vagrant.configure(2) do |config|
-  chef_version = '12.8.1'
+  chef_version = '12.9.41'
   config.berkshelf.enabled = true
 
   config.vm.box = 'opscode-centos-7.2'
