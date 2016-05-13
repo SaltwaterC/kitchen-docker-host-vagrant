@@ -25,6 +25,7 @@ APT::Install-Suggests "0";' > /etc/apt/apt.conf.d/01buildconfig && \
   rm -f /lib/systemd/system/anaconda.target.wants/*; \
   rm -f /lib/systemd/system/plymouth*; \
   rm -f /lib/systemd/system/systemd-update-utmp* && \
+  rm -f /usr/lib/tmpfiles.d/tmp.conf && \
   systemctl set-default multi-user.target && \
   # Enable SSH
   systemctl enable ssh.service && \
