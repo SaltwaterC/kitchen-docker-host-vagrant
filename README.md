@@ -261,3 +261,37 @@ Example:
 kitchen converge default
 kitchen verify default
 ```
+
+## Caching commonly used chef_gem resources
+
+If you have a commonly used gem installed by the chef_gem resource, it pays off to leverage the Dockerfiles to have that gem preinstalled in a Docker image. For example, interfacing with AWS may require aws-sdk-core to be available in your Chef cookbooks.
+
+Adding something like this RUN command to your Dockerfile's speeds up the kitchen converge:
+
+```
+RUN /opt/chef/embedded/bin/gem install --no-user-install --install-dir \
+  /opt/chef/embedded/lib/ruby/gems/2.1.0 aws-sdk-core
+```
+
+If you need a specific gem version, it may be specified like `aws-sdk-core:2.2:34`.
+
+Another advantage of baking Ruby gems into Docker images is the fact that it removes the need to download stuff from rubygems.org which is useful when the service is experiencing hiccups.
+
+## Preinstalling busser, busser-serverspec, and serverspec
+
+Using Test Kitchen verifier with a busser is a repetitive and time wasting activity. It also depends on rubygems.org. In this example I'm using the serverspec busser, but it should be applicable for the rest as well.
+
+Drop another layer using a RUN command like this:
+
+```
+# setup busser/serverspec to speed up kitchen verify
+RUN su - kitchen -c 'BUSSER_ROOT="/tmp/verifier"; export BUSSER_ROOT; \
+  GEM_HOME="/tmp/verifier/gems"; export GEM_HOME; \
+  GEM_PATH="/tmp/verifier/gems"; export GEM_PATH; \
+  GEM_CACHE="/tmp/verifier/gems/cache"; export GEM_CACHE; \
+  /opt/chef/embedded/bin/gem install --no-rdoc --no-ri \
+  --no-format-executable -n /tmp/verifier/bin --no-user-install \
+  busser busser-serverspec serverspec'
+```
+
+This should setup all the required Ruby gems to have them ready for a `kitchen verify`.
