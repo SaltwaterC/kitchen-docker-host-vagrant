@@ -3,8 +3,7 @@ Vagrant.configure(2) do |config|
   chef_version = '12.9.41'
   config.berkshelf.enabled = true
 
-  config.vm.box = 'opscode-centos-7.2'
-  config.vm.box_url = 'https://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-7.2_chef-provisionerless.box'
+  config.vm.box = 'bento/centos-7.2'
   config.vm.hostname = 'kitchen-docker-host'
 
   config.vm.provider 'virtualbox' do |vb|
