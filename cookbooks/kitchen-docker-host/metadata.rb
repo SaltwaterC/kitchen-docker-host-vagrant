@@ -5,6 +5,8 @@ license 'MIT'
 description 'Installs/Configures kitchen-docker-host'
 long_description 'Installs/Configures kitchen-docker-host'
 version '0.1.2'
+source_url 'https://git.io/vrMEH'
+issues_url 'https://git.io/vrMEj'
 
 depends 'yum-epel'
 depends 'yum'
