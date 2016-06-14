@@ -1,13 +1,15 @@
 Vagrant.require_version '>= 1.8.0'
 Vagrant.configure(2) do |config|
   chef_version = '12.10.24'
+  hostname = 'kitchen-docker-host'
+
   config.berkshelf.enabled = true
 
-  config.vm.box = 'bento/centos-7.2'
-  config.vm.hostname = 'kitchen-docker-host'
+  config.vm.box = 'centos/7'
+  config.vm.hostname = hostname
 
   config.vm.provider 'virtualbox' do |vb|
-    vb.name = 'kitchen-docker-host'
+    vb.name = hostname
     vb.cpus = ENV['VB_CPUS'] || 4
     vb.memory = ENV['VB_MEM'] || 8192
     vb.customize ['modifyvm', :id, '--nictype1', 'virtio']

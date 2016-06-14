@@ -8,6 +8,7 @@ Docker host as Vagrant box created with [kitchen-docker](https://github.com/port
  * [Vagrant](https://www.vagrantup.com) 1.8+
  * [ChefDK](https://downloads.chef.io/chef-dk/)
  * [vagrant-berkshelf](https://github.com/berkshelf/vagrant-berkshelf)
+ * [vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest)
  * [Docker](https://www.docker.com) client
 
 The vagrant-berkshelf plugin may be easily installed with:
@@ -35,15 +36,14 @@ export DOCKER_HOST=tcp://192.168.99.100:2375
 To check that the Docker connection is OK:
 
 ```bash
-docker info
 Containers: 0
  Running: 0
  Paused: 0
  Stopped: 0
 Images: 0
-Server Version: 1.11.1
+Server Version: 1.11.2
 Storage Driver: devicemapper
- Pool Name: docker-253:0-664575-pool
+ Pool Name: docker-253:0-394848-pool
  Pool Blocksize: 65.54 kB
  Base Device Size: 10.74 GB
  Backing Filesystem: xfs
@@ -51,7 +51,7 @@ Storage Driver: devicemapper
  Metadata file: /dev/loop1
  Data Space Used: 11.8 MB
  Data Space Total: 107.4 GB
- Data Space Available: 39.85 GB
+ Data Space Available: 38.34 GB
  Metadata Space Used: 581.6 kB
  Metadata Space Total: 2.147 GB
  Metadata Space Available: 2.147 GB
@@ -62,20 +62,20 @@ Storage Driver: devicemapper
  Data loop file: /var/lib/docker/devicemapper/devicemapper/data
  WARNING: Usage of loopback devices is strongly discouraged for production use. Either use `--storage-opt dm.thinpooldev` or use `--storage-opt dm.no_warn_on_loop_devices=true` to suppress this warning.
  Metadata loop file: /var/lib/docker/devicemapper/devicemapper/metadata
- Library Version: 1.02.107-RHEL7 (2015-10-14)
+ Library Version: 1.02.107-RHEL7 (2015-12-01)
 Logging Driver: json-file
 Cgroup Driver: cgroupfs
 Plugins:
  Volume: local
  Network: bridge null host
-Kernel Version: 3.10.0-327.el7.x86_64
+Kernel Version: 3.10.0-327.13.1.el7.x86_64
 Operating System: CentOS Linux 7 (Core)
 OSType: linux
 Architecture: x86_64
 CPUs: 4
 Total Memory: 7.64 GiB
 Name: kitchen-docker-host
-ID: LGYI:UZT6:G6V4:KQ6X:ISH5:ENN2:OFL5:XW75:H7VZ:L5G3:Y3MD:3RZD
+ID: K2QR:TSXG:YD4X:JGVY:GPTD:5JNQ:EPI4:XCD6:Z7PR:2EKH:S7RH:GSSC
 Docker Root Dir: /var/lib/docker
 Debug mode (client): false
 Debug mode (server): false
@@ -171,8 +171,8 @@ kitchen-docker supports custom Dockerfiles via the [dockerfile](https://github.c
 
 This is the list of supported distributions with these Dockerfiles:
 
- * CentOS 6.7 (also useful for targeting Amazon Linux)
- * Ubuntu 15.04
+ * CentOS 6.8 (also useful for targeting Amazon Linux)
+ * Ubuntu 15.10
  * Debian 8.2
 
 For systemd to work, it requires at least CAP_SYS_ADMIN. For the shutdown support to work, I had to run the containers in privileged mode. There's too much work to figure out an exact list of capabilities and there's no guarantee as privileged provides more privileges than enabling all the supported capabilities.
@@ -192,9 +192,9 @@ driver:
   chef_version: 12.10.24
 
 platforms:
-- name: centos-6.7
+- name: centos-6.8
   driver_config:
-    dockerfile: "../centos-6.7"
+    dockerfile: "../centos-6.8"
 ```
 
 For a development machine, I use Docker in a VM even for a host that supports it natively, therefore the SSH inside the container *is* a hard dependency. The reason for this statement is the fact that the volumes feature essentially provide [root access to the host](http://reventlov.com/advisories/using-the-docker-command-to-root-the-host) for all the users who have access to the Docker socket.

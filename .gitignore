@@ -3,3 +3,4 @@
 .kitchen/
 Gemfile.lock
 vagrant-*.json
+kitchen-docker-host.json

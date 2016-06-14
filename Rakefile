@@ -17,6 +17,7 @@ task :clean do
   sh 'vagrant destroy -f'
   rm_rf '.vagrant'
   rm_f Dir['vagrant-*.json']
+  rm_f 'kitchen-docker-host.json'
 end
 
 desc 'Runs "vagrant ssh"'
