@@ -43,6 +43,7 @@ RUN su - kitchen -c 'mkdir /home/kitchen/.ssh && touch /home/kitchen/.ssh/author
   echo '<%= File.read(@public_key).strip %>' > /home/kitchen/.ssh/authorized_keys
 
 # setup the rsync transport and Chef Omnibus
-RUN yum -y install curl rsync && \
+# setup initscripts to fix Chef service resources which depend on old behaviour
+RUN yum -y install curl rsync initscripts && \
   curl -L http://www.opscode.com/chef/install.sh -o /tmp/install.sh && \
   bash /tmp/install.sh -v <%= @chef_version %>
