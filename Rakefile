@@ -2,6 +2,22 @@ require 'os'
 
 ENV['PATH'] = '/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin' unless OS.windows?
 
+namespace 'install' do
+  desc 'Installs OS X runtime dependencies; requires brew and caskroom'
+  task :osx do
+    sh 'brew cask install virtualbox'
+    sh 'brew cask install vagrant'
+    sh 'brew cask install chefdk'
+    Rake::Task[:setup].invoke
+  end
+end
+
+desc 'Installs Vagrant dependencies'
+task :setup do
+  sh 'vagrant plugin install vagrant-berkshelf'
+  sh 'vagrant plugin install vagrant-vbguest'
+end
+
 desc 'Runs "vagrant up"'
 task :up do
   sh 'vagrant up'
