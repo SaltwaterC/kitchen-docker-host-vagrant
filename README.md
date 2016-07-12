@@ -1,29 +1,29 @@
 ## About
 
-Docker host as Vagrant box created with [kitchen-docker](https://github.com/portertech/kitchen-docker) in mind. Provides a Docker host and Squid as caching proxy. It doesn't have anything [Test Kitchen](http://kitchen.ci) specific per-se, but it provides a consistent development environment.
+Docker host as Vagrant box created with [kitchen-docker](https://github.com/portertech/kitchen-docker) in mind. Provides a Docker host and Squid as caching proxy. It doesn't have anything [Test Kitchen](http://kitchen.ci) specific per-se, but it provides a consistent development environment. This document also contains a list of speed hacks to make Test Kitchen a lot more faster compared to its defaults.
 
 ## Dependencies
 
  * [VirtualBox](https://www.virtualbox.org)
  * [Vagrant](https://www.vagrantup.com) 1.8+
+  * [vagrant-berkshelf](https://github.com/berkshelf/vagrant-berkshelf)
+  * [vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest)
  * [ChefDK](https://downloads.chef.io/chef-dk/)
- * [vagrant-berkshelf](https://github.com/berkshelf/vagrant-berkshelf)
- * [vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest)
  * [Docker](https://www.docker.com) client
 
-The vagrant-berkshelf plugin may be easily installed with:
-
 ```bash
-vagrant plugin install vagrant-berkshelf
+# install Vagrant dependencies
+bundle install
+rake setup
 ```
 
 Vagrant 1.8+ is required as nodes_path is now a requirement for chef_zero provisioner. This makes the chef_zero provisioner to be backwards incompatible while the declaration of nodes_path keeps it from being forward compatible. The supplied Vagrantfile requires bit of work to make it compatible with 1.7.x and below.
 
 ## How to use
 
-For starting the VM, simply issue a `vagrant up` command in the root directory of this project. If you want to use the bundled Rake tasks, you'll need to run `bundle install` first.
+For starting the VM, simply issue a `rake up` command in the root directory of this project.
 
-By default, it uses 4 virtual cores and 8192 GB of RAM. You may either edit the supplied Vagrantfile or export VB_CPUS and / or VB_MEM environment variables with the desired values.
+By default, it uses 4 virtual cores and 8192 GB of RAM. Export VB_CPUS and / or VB_MEM environment variables with the desired values to customize.
 
 The VM itself uses a host-only network adapter with the IP address 192.168.99.100. This makes it sort of a drop-in replacement for docker-machine. The Docker socket isn't TLS enabled though.
 
@@ -33,7 +33,7 @@ To tell the Docker client where to find the host, simply:
 export DOCKER_HOST=tcp://192.168.99.100:2375
 ```
 
-To check that the Docker connection is OK:
+To check whether the Docker connection is OK:
 
 ```bash
 Containers: 0
@@ -60,7 +60,6 @@ Storage Driver: devicemapper
  Deferred Deletion Enabled: false
  Deferred Deleted Device Count: 0
  Data loop file: /var/lib/docker/devicemapper/devicemapper/data
- WARNING: Usage of loopback devices is strongly discouraged for production use. Either use `--storage-opt dm.thinpooldev` or use `--storage-opt dm.no_warn_on_loop_devices=true` to suppress this warning.
  Metadata loop file: /var/lib/docker/devicemapper/devicemapper/metadata
  Library Version: 1.02.107-RHEL7 (2015-12-01)
 Logging Driver: json-file
@@ -273,7 +272,7 @@ RUN /opt/chef/embedded/bin/gem install --no-user-install --install-dir \
   /opt/chef/embedded/lib/ruby/gems/2.1.0 aws-sdk-core
 ```
 
-If you need a specific gem version, it may be specified like `aws-sdk-core:2.2:34`.
+If you need a specific gem version, it may be specified like `aws-sdk-core:2.2.34`.
 
 Another advantage of baking Ruby gems into Docker images is the fact that it removes the need to download stuff from rubygems.org which is useful when the service is experiencing hiccups.
 
