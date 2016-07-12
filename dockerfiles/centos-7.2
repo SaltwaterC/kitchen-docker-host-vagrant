@@ -1,0 +1,48 @@
+FROM centos:7.2.1511
+ENV TERM xterm
+
+ENV container docker
+
+VOLUME ["/sys/fs/cgroup"]
+ENV init /sbin/init
+
+RUN yum clean all && \
+  yum -y install sudo util-linux-ng openssh-server && \
+  # Cleanup systemd
+  cd /lib/systemd/system/sysinit.target.wants/; ls | grep -v systemd-tmpfiles-setup | xargs rm -f $1 \
+  rm -f /lib/systemd/system/multi-user.target.wants/*;\
+  rm -f /etc/systemd/system/*.wants/*;\
+  rm -f /lib/systemd/system/local-fs.target.wants/*; \
+  rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
+  rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
+  rm -f /lib/systemd/system/basic.target.wants/*;\
+  rm -f /lib/systemd/system/anaconda.target.wants/*; \
+  rm -f /lib/systemd/system/plymouth*; \
+  rm -f /lib/systemd/system/systemd-update-utmp* && \
+  rm -f /usr/lib/tmpfiles.d/tmp.conf && \
+  systemctl set-default multi-user.target && \
+  # Enable SSH
+  systemctl enable sshd.service && \
+  # Setup kitchen user with passwordless sudo
+  useradd -d /home/kitchen -m -s /bin/bash kitchen && \
+  (echo kitchen:kitchen | chpasswd) && \
+  mkdir -p /etc/sudoers.d && \
+  echo 'kitchen ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/kitchen && \
+  # remove /run/nologin which prevents ssh authentication for non-root
+  ln -s /lib/systemd/system/rc-local.service /etc/systemd/system/multi-user.target.wants/rc-local.service && \
+  printf "%s\n" '#!/bin/sh' 'rm -f /run/nologin' 'exit 0' > /etc/rc.d/rc.local && \
+  # by default this script isn't executable, therefore systemd skips rc.local
+  chmod +x /etc/rc.d/rc.local && \
+  # Generate the OpenSSH server keys
+  ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N '' && \
+  ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key -N ''
+
+# setup passwordless ssh
+RUN su - kitchen -c 'mkdir /home/kitchen/.ssh && touch /home/kitchen/.ssh/authorized_keys' && \
+  chmod 700 /home/kitchen/.ssh && chmod 600 /home/kitchen/.ssh/authorized_keys && \
+  echo '<%= File.read(@public_key).strip %>' > /home/kitchen/.ssh/authorized_keys
+
+# setup the rsync transport and Chef Omnibus
+RUN yum -y install curl rsync && \
+  curl -L http://www.opscode.com/chef/install.sh -o /tmp/install.sh && \
+  bash /tmp/install.sh -v <%= @chef_version %>

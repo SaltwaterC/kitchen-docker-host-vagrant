@@ -170,7 +170,8 @@ kitchen-docker supports custom Dockerfiles via the [dockerfile](https://github.c
 
 This is the list of supported distributions with these Dockerfiles:
 
- * CentOS 6.8 (also useful for targeting Amazon Linux)
+ * CentOS 6.8
+ * CentOS 7.2 (may be used for targeting Amazon Linux)
  * Ubuntu 15.10
  * Debian 8.2
 
