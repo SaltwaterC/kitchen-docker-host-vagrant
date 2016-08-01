@@ -7,7 +7,7 @@ driver:
 
 provisioner:
   name: chef_zero
-  require_chef_omnibus: 12.11.18
+  require_chef_omnibus: 12.12.15
 
 platforms:
   - name: centos-7.2

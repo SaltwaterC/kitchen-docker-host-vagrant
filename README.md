@@ -41,9 +41,9 @@ Containers: 0
  Paused: 0
  Stopped: 0
 Images: 0
-Server Version: 1.11.2
+Server Version: 1.12.0
 Storage Driver: devicemapper
- Pool Name: docker-253:0-394848-pool
+ Pool Name: docker-253:0-525930-pool
  Pool Blocksize: 65.54 kB
  Base Device Size: 10.74 GB
  Backing Filesystem: xfs
@@ -51,34 +51,42 @@ Storage Driver: devicemapper
  Metadata file: /dev/loop1
  Data Space Used: 11.8 MB
  Data Space Total: 107.4 GB
- Data Space Available: 38.34 GB
+ Data Space Available: 38.02 GB
  Metadata Space Used: 581.6 kB
  Metadata Space Total: 2.147 GB
  Metadata Space Available: 2.147 GB
+ Thin Pool Minimum Free Space: 10.74 GB
  Udev Sync Supported: true
  Deferred Removal Enabled: false
  Deferred Deletion Enabled: false
  Deferred Deleted Device Count: 0
  Data loop file: /var/lib/docker/devicemapper/devicemapper/data
+ WARNING: Usage of loopback devices is strongly discouraged for production use. Use `--storage-opt dm.thinpooldev` to specify a custom block storage device.
  Metadata loop file: /var/lib/docker/devicemapper/devicemapper/metadata
- Library Version: 1.02.107-RHEL7 (2015-12-01)
+ Library Version: 1.02.107-RHEL7 (2016-06-09)
 Logging Driver: json-file
 Cgroup Driver: cgroupfs
 Plugins:
  Volume: local
- Network: bridge null host
-Kernel Version: 3.10.0-327.13.1.el7.x86_64
+ Network: bridge host null overlay
+Swarm: inactive
+Runtimes: runc
+Default Runtime: runc
+Security Options: seccomp
+Kernel Version: 3.10.0-327.22.2.el7.x86_64
 Operating System: CentOS Linux 7 (Core)
 OSType: linux
 Architecture: x86_64
 CPUs: 4
 Total Memory: 7.64 GiB
 Name: kitchen-docker-host
-ID: K2QR:TSXG:YD4X:JGVY:GPTD:5JNQ:EPI4:XCD6:Z7PR:2EKH:S7RH:GSSC
+ID: RXGQ:ZEK3:V2XW:OIYI:R74R:LWDU:HQQM:MUUR:5JDY:D2MX:PIEL:IFQL
 Docker Root Dir: /var/lib/docker
-Debug mode (client): false
-Debug mode (server): false
+Debug Mode (client): false
+Debug Mode (server): false
 Registry: https://index.docker.io/v1/
+Insecure Registries:
+ 127.0.0.0/8
 ```
 
 To use it with Test Kitchen, you need to install the kitchen-docker gem and to specify docker as Kitchen driver.
@@ -147,7 +155,7 @@ Example:
 driver:
   name: docker
   provision_command:
-    - curl -L http://www.opscode.com/chef/install.sh -o /tmp/install.sh && bash /tmp/install.sh -v 12.11.18
+    - curl -L http://www.opscode.com/chef/install.sh -o /tmp/install.sh && bash /tmp/install.sh -v 12.12.15
 
 provisioner:
   name: chef_zero
@@ -189,7 +197,7 @@ Example:
 ```yml
 driver:
   name: docker
-  chef_version: 12.11.18
+  chef_version: 12.12.15
 
 platforms:
 - name: centos-6.8
