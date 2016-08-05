@@ -8,7 +8,7 @@ Vagrant.configure(2) do |config|
 
   config.berkshelf.enabled = true
 
-  config.vm.box = 'centos/7'
+  config.vm.box = 'bento/centos-7.2'
   config.vm.hostname = hostname
 
   config.vm.provider 'virtualbox' do |vb|
