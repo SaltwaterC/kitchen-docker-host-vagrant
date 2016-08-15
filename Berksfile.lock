@@ -3,9 +3,12 @@ DEPENDENCIES
     path: cookbooks/kitchen-docker-host
 
 GRAPH
-  kitchen-docker-host (0.1.2)
+  compat_resource (12.10.7)
+  docker (2.9.3)
+    compat_resource (>= 12.9.0)
+  kitchen-docker-host (0.2.0)
+    docker (>= 0.0.0)
     selinux (>= 0.0.0)
-    yum (>= 0.0.0)
     yum-epel (>= 0.0.0)
   selinux (0.9.0)
   yum (3.10.0)

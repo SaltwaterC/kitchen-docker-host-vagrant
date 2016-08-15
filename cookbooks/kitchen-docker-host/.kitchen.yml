@@ -1,6 +1,8 @@
 ---
 driver:
   name: vagrant
+  vagrantfiles:
+    - vagrant.rb
   network:
     - ["forwarded_port", {guest: 2375, host: 2375, host_ip: '127.0.0.1'}]
     - ["forwarded_port", {guest: 3128, host: 3128, host_ip: '127.0.0.1'}]
