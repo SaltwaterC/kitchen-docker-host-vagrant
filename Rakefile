@@ -38,7 +38,7 @@ end
 
 desc 'Runs "vagrant ssh"'
 task :ssh do
-  sh 'vagrant ssh'
+  system 'vagrant ssh'
 end
 
 desc 'Recreates the machine from scratch and drops to a shell'
