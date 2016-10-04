@@ -1,3 +1,15 @@
+# monkey-patch vagrant-berkshelf #305 https://github.com/berkshelf/vagrant-berkshelf/issues/305
+module VagrantPlugins
+  module Berkshelf
+    module Action
+      class Check < Base
+        send(:remove_const, :BERKS_REQUIREMENT) if const_defined?(:BERKS_REQUIREMENT)
+        BERKS_REQUIREMENT = ">= 4.0"
+      end
+    end
+  end
+end
+
 Vagrant.require_version '>= 1.8.0'
 Vagrant.configure(2) do |config|
   chef_version = '12.12.15'
