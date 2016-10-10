@@ -10,7 +10,7 @@ describe 'kitchen-docker-host::default' do
     end
   end
 
-  describe file('/lib/systemd/system/docker.service') do
+  describe file('/etc/systemd/system/docker.service') do
     it { is_expected.to be_file }
     it { is_expected.to be_owned_by 'root' }
     it { is_expected.to be_grouped_into 'root' }
@@ -18,8 +18,8 @@ describe 'kitchen-docker-host::default' do
 
     it do
       is_expected.to contain 'ExecStart=/usr/bin/docker daemon '\
-      '--host=tcp://0.0.0.0:2375 '\
-      '--bip=172.17.42.1/16'
+        '--bip=172.17.42.1/16 -H tcp://0.0.0.0:2375 '\
+        '--pidfile=/var/run/docker.pid'
     end
   end
 
