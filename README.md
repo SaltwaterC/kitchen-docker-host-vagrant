@@ -41,9 +41,9 @@ Containers: 0
  Paused: 0
  Stopped: 0
 Images: 0
-Server Version: 1.12.0
+Server Version: 1.12.1
 Storage Driver: devicemapper
- Pool Name: docker-253:0-525930-pool
+ Pool Name: docker-253:0-67819425-pool
  Pool Blocksize: 65.54 kB
  Base Device Size: 10.74 GB
  Backing Filesystem: xfs
@@ -51,7 +51,7 @@ Storage Driver: devicemapper
  Metadata file: /dev/loop1
  Data Space Used: 11.8 MB
  Data Space Total: 107.4 GB
- Data Space Available: 38.02 GB
+ Data Space Available: 39.81 GB
  Metadata Space Used: 581.6 kB
  Metadata Space Total: 2.147 GB
  Metadata Space Available: 2.147 GB
@@ -63,24 +63,24 @@ Storage Driver: devicemapper
  Data loop file: /var/lib/docker/devicemapper/devicemapper/data
  WARNING: Usage of loopback devices is strongly discouraged for production use. Use `--storage-opt dm.thinpooldev` to specify a custom block storage device.
  Metadata loop file: /var/lib/docker/devicemapper/devicemapper/metadata
- Library Version: 1.02.107-RHEL7 (2016-06-09)
+ Library Version: 1.02.107-RHEL7 (2015-10-14)
 Logging Driver: json-file
 Cgroup Driver: cgroupfs
 Plugins:
  Volume: local
- Network: bridge host null overlay
+ Network: host bridge null overlay
 Swarm: inactive
 Runtimes: runc
 Default Runtime: runc
 Security Options: seccomp
-Kernel Version: 3.10.0-327.22.2.el7.x86_64
+Kernel Version: 3.10.0-327.el7.x86_64
 Operating System: CentOS Linux 7 (Core)
 OSType: linux
 Architecture: x86_64
 CPUs: 4
 Total Memory: 7.64 GiB
 Name: kitchen-docker-host
-ID: RXGQ:ZEK3:V2XW:OIYI:R74R:LWDU:HQQM:MUUR:5JDY:D2MX:PIEL:IFQL
+ID: MQMP:H4VR:CWM3:5GW5:HCKK:UCLX:HCPH:4RZ7:W74O:FXTY:U75Z:OSON
 Docker Root Dir: /var/lib/docker
 Debug Mode (client): false
 Debug Mode (server): false
@@ -155,7 +155,7 @@ Example:
 driver:
   name: docker
   provision_command:
-    - curl -L http://www.opscode.com/chef/install.sh -o /tmp/install.sh && bash /tmp/install.sh -v 12.12.15
+    - curl -L http://www.opscode.com/chef/install.sh -o /tmp/install.sh && bash /tmp/install.sh -v 12.14.89
 
 provisioner:
   name: chef_zero
@@ -197,7 +197,7 @@ Example:
 ```yml
 driver:
   name: docker
-  chef_version: 12.12.15
+  chef_version: 12.14.89
 
 platforms:
 - name: centos-6.8
