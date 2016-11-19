@@ -1,6 +1,6 @@
 require 'os'
 
-ENV['PATH'] = '/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin' unless OS.windows?
+ENV['PATH'] = "/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:#{ENV['HOME']}/bin" unless OS.windows?
 
 namespace 'install' do
   desc 'Installs OS X runtime dependencies; requires brew and caskroom'
