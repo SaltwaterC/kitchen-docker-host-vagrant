@@ -4,6 +4,7 @@ package 'postfix' do
   action :remove
 end
 
+include_recipe 'sysctl::default'
 include_recipe 'yum-epel::default'
 
 pkg = %w(
@@ -34,17 +35,12 @@ selinux_state 'SELinux Disabled' do
   action :disabled
 end
 
-cookbook_file '/etc/sysctl.d/10-bridge-nf-call.conf' do
-  source 'etc.sysctl.d.10-bridge-nf-call.conf'
-  owner 'root'
-  group 'root'
-  mode '0644'
-  notifies :run, 'execute[sysctl-p]', :immediately
+sysctl_param 'net.bridge.bridge-nf-call-iptables' do
+  value 1
 end
 
-execute 'sysctl-p' do
-  command 'sysctl -p'
-  action :nothing
+sysctl_param 'net.bridge.bridge-nf-call-ip6tables' do
+  value 1
 end
 
 execute 'reboot' do
