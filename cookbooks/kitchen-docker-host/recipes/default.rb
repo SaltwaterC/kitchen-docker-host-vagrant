@@ -35,6 +35,10 @@ selinux_state 'SELinux Disabled' do
   action :disabled
 end
 
+sysctl_param 'net.ipv4.ip_forward' do
+  value 1
+end
+
 sysctl_param 'net.bridge.bridge-nf-call-iptables' do
   value 1
 end
