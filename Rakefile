@@ -1,6 +1,28 @@
-require 'os'
+require_relative 'chef_version'
 
-ENV['PATH'] = "/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:#{ENV['HOME']}/bin" unless OS.windows?
+## Tasks ported from the previous vagrant-berkshelf implementation
+
+desc 'kitchen destroy and cleanup'
+task :clean do
+  system 'bundle exec kitchen destroy'
+  rm_rf '.kitchen'
+  rm_f %w(Berksfile.lock Gemfile.lock)
+end
+
+desc 'Clears the Squid cache'
+task :clear do
+  sh 'bundle exec kitchen exec -c "sudo service squid stop && sleep 5 && '\
+  'sudo rm -rf /var/spool/squid && '\
+  'sudo mkdir /var/spool/squid && '\
+  'sudo chown squid:squid /var/spool/squid && '\
+  'sudo squid -z && sleep 5 && sudo service squid start"'
+end
+
+desc 'Halts the box'
+task :halt do
+  STDERR.puts 'https://github.com/test-kitchen/test-kitchen/issues/350'
+  exit 1
+end
 
 namespace 'install' do
   desc 'Installs OS X runtime dependencies; requires brew and caskroom'
@@ -12,56 +34,17 @@ namespace 'install' do
   end
 end
 
-desc 'Installs Vagrant dependencies'
-task :setup do
-  sh 'vagrant plugin install vagrant-berkshelf'
-  sh 'vagrant plugin install vagrant-vbguest'
-end
-
-desc 'Runs "vagrant up"'
-task :up do
-  sh 'vagrant up'
-end
-
-desc 'Runs "vagrant halt"'
-task :halt do
-  sh 'vagrant halt'
-end
-
-desc 'Runs "vagrant destroy"'
-task :clean do
-  sh 'vagrant destroy -f'
-  rm_rf '.vagrant'
-  rm_f Dir['vagrant-*.json']
-  rm_f 'kitchen-docker-host.json'
-end
-
-desc 'Runs "vagrant ssh"'
-task :ssh do
-  system 'vagrant ssh'
-end
+desc 'Alias of converge'
+task provision: [:converge]
 
 desc 'Recreates the machine from scratch and drops to a shell'
-task redo: [:clean, :up, :ssh]
+task redo: [:clean, :provision, :ssh]
 
-desc 'Runs "vagrant reload"'
+desc 'Reloads the box'
 task :reload do
-  sh 'rm .vagrant/machines/default/virtualbox/synced_folders'
-  sh 'vagrant reload --provision'
-end
-
-desc 'Runs "vagrant provision"'
-task :provision do
-  sh 'vagrant provision'
-end
-
-desc 'Clears the Squid cache'
-task :clear do
-  sh 'vagrant ssh -c "sudo service squid stop && sleep 5 && '\
-  'sudo rm -rf /var/spool/squid && '\
-  'sudo mkdir /var/spool/squid && '\
-  'sudo chown squid:squid /var/spool/squid && '\
-  'sudo squid -z && sleep 5 && sudo service squid start"'
+  STDERR.puts 'https://github.com/test-kitchen/kitchen-vagrant/issues/69'
+  STDERR.puts 'https://github.com/test-kitchen/test-kitchen/issues/350'
+  exit 1
 end
 
 begin
@@ -72,4 +55,35 @@ rescue LoadError
   STDERR.puts 'Rubocop, or one of its dependencies, is not available.'
 end
 
-task default: [:rubocop]
+desc 'Install dependencies'
+task :setup do
+  sh 'bundle install'
+end
+
+desc 'Login onto the box'
+task :ssh do
+  sh 'bundle exec kitchen login'
+end
+
+desc 'Alias of converge'
+task up: [:converge]
+
+## Test Kitchen specific
+
+desc 'kitchen converge'
+task converge: [:setup] do
+  sh 'bundle exec kitchen converge'
+end
+
+desc 'kitchen verify'
+task verify: [:setup] do
+  sh 'bundle exec kitchen verify'
+end
+
+desc 'kitchen verify && rubocop && foodcritic'
+task test: [:converge, :verify, :rubocop, :foodcritic]
+
+desc 'Runs foodcritic'
+task :foodcritic do
+  sh "bundle exec foodcritic --chef-version #{CHEF_VERSION} --progress --epic-fail any ."
+end

@@ -1,6 +1,18 @@
-*.box
-.vagrant/
-.kitchen/
+.vagrant
+Berksfile.lock
+*~
+*#
+.#*
+\#*#
+.*.sw[a-z]
+*.un~
+
+# Bundler
 Gemfile.lock
-vagrant-*.json
-kitchen-docker-host.json
+bin/*
+.bundle/*
+
+.kitchen/
+.kitchen.local.yml
+
+.DS_Store

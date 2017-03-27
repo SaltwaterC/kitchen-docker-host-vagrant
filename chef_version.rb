@@ -1,0 +1,1 @@
+CHEF_VERSION = '12.18.31'.freeze

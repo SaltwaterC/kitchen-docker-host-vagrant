@@ -31,22 +31,13 @@ service 'squid' do
   action [:enable, :start]
 end
 
-selinux_state 'SELinux Disabled' do
-  action :disabled
-end
-
-sysctl_param 'net.ipv4.ip_forward' do
-  value 1
-end
-
-sysctl_param 'net.bridge.bridge-nf-call-iptables' do
-  value 1
-end
-
-sysctl_param 'net.bridge.bridge-nf-call-ip6tables' do
-  value 1
-end
-
-execute 'reboot' do
-  only_if 'test -d /sys/fs/selinux'
+%w(
+  net.ipv4.ip_forward
+  net.ipv6.conf.all.forwarding
+  net.bridge.bridge-nf-call-iptables
+  net.bridge.bridge-nf-call-ip6tables
+).each do |param|
+  sysctl_param param do
+    value 1
+  end
 end

@@ -2,22 +2,22 @@
 
 Docker host as Vagrant box created with [kitchen-docker](https://github.com/portertech/kitchen-docker) in mind. Provides a Docker host and Squid as caching proxy. It doesn't have anything [Test Kitchen](http://kitchen.ci) specific per-se, but it provides a consistent development environment. This document also contains a list of speed hacks to make Test Kitchen a lot more faster compared to its defaults.
 
+The machine is also implemented using Test Kitchen using the kitchen-vagrant driver. It used to be implemented with Vagrant and vagrant-berkshelf, however, vagrant-berkshelf has the bad habit of breaking quite often.
+
+All the required gems are supplied by ChefDK.
+
 ## Dependencies
 
- * [VirtualBox](https://www.virtualbox.org)
- * [Vagrant](https://www.vagrantup.com) 1.8+
-  * [vagrant-berkshelf](https://github.com/berkshelf/vagrant-berkshelf)
-  * [vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest)
  * [ChefDK](https://downloads.chef.io/chef-dk/)
+ * [VirtualBox](https://www.virtualbox.org)
+ * [Vagrant](https://www.vagrantup.com) 1.9.2+
  * [Docker](https://www.docker.com) client
 
 ```bash
-# install Vagrant dependencies
-bundle install
 rake setup
 ```
 
-Vagrant 1.8+ is required as nodes_path is now a requirement for chef_zero provisioner. This makes the chef_zero provisioner to be backwards incompatible while the declaration of nodes_path keeps it from being forward compatible. The supplied Vagrantfile requires bit of work to make it compatible with 1.7.x and below.
+Vagrant 1.9.2+ is required. The previous versions (up to 1.9) stopped working properly with Atlas.
 
 ## How to use
 
@@ -41,52 +41,41 @@ Containers: 0
  Paused: 0
  Stopped: 0
 Images: 0
-Server Version: 1.12.1
-Storage Driver: devicemapper
- Pool Name: docker-253:0-67819425-pool
- Pool Blocksize: 65.54 kB
- Base Device Size: 10.74 GB
+Server Version: 17.03.0-ce
+Storage Driver: overlay
  Backing Filesystem: xfs
- Data file: /dev/loop0
- Metadata file: /dev/loop1
- Data Space Used: 11.8 MB
- Data Space Total: 107.4 GB
- Data Space Available: 39.81 GB
- Metadata Space Used: 581.6 kB
- Metadata Space Total: 2.147 GB
- Metadata Space Available: 2.147 GB
- Thin Pool Minimum Free Space: 10.74 GB
- Udev Sync Supported: true
- Deferred Removal Enabled: false
- Deferred Deletion Enabled: false
- Deferred Deleted Device Count: 0
- Data loop file: /var/lib/docker/devicemapper/devicemapper/data
- WARNING: Usage of loopback devices is strongly discouraged for production use. Use `--storage-opt dm.thinpooldev` to specify a custom block storage device.
- Metadata loop file: /var/lib/docker/devicemapper/devicemapper/metadata
- Library Version: 1.02.107-RHEL7 (2015-10-14)
+ Supports d_type: true
 Logging Driver: json-file
 Cgroup Driver: cgroupfs
 Plugins:
  Volume: local
- Network: host bridge null overlay
+ Network: bridge host macvlan null overlay
 Swarm: inactive
 Runtimes: runc
 Default Runtime: runc
-Security Options: seccomp
-Kernel Version: 3.10.0-327.el7.x86_64
+Init Binary: docker-init
+containerd version: 977c511eda0925a723debdc94d09459af49d082a
+runc version: a01dafd48bc1c7cc12bdb01206f9fea7dd6feb70
+init version: 949e6fa
+Security Options:
+ seccomp
+  Profile: default
+Kernel Version: 3.10.0-514.el7.x86_64
 Operating System: CentOS Linux 7 (Core)
 OSType: linux
 Architecture: x86_64
 CPUs: 4
-Total Memory: 7.64 GiB
-Name: kitchen-docker-host
-ID: MQMP:H4VR:CWM3:5GW5:HCKK:UCLX:HCPH:4RZ7:W74O:FXTY:U75Z:OSON
+Total Memory: 3.702 GiB
+Name: kdh-centos-73.vagrantup.com
+ID: LZCX:SICI:GNYY:AWXN:DTE3:WMBT:DHQ4:6FZB:BULH:M7EJ:WPVZ:CDUA
 Docker Root Dir: /var/lib/docker
 Debug Mode (client): false
 Debug Mode (server): false
 Registry: https://index.docker.io/v1/
+Experimental: false
 Insecure Registries:
  127.0.0.0/8
+Live Restore Enabled: false
 ```
 
 To use it with Test Kitchen, you need to install the kitchen-docker gem and to specify docker as Kitchen driver.
@@ -155,7 +144,7 @@ Example:
 driver:
   name: docker
   provision_command:
-    - curl -L http://www.opscode.com/chef/install.sh -o /tmp/install.sh && bash /tmp/install.sh -v 12.16.42
+    - curl -L http://www.opscode.com/chef/install.sh -o /tmp/install.sh && bash /tmp/install.sh -v 12.18.31
 
 provisioner:
   name: chef_zero
@@ -197,7 +186,7 @@ Example:
 ```yml
 driver:
   name: docker
-  chef_version: 12.16.42
+  chef_version: 12.18.31
 
 platforms:
 - name: centos-6.8
