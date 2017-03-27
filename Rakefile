@@ -1,5 +1,16 @@
 require_relative 'chef_version'
 
+# workaround for https://github.com/test-kitchen/kitchen-vagrant/issues/69
+# and https://github.com/test-kitchen/test-kitchen/issues/350
+def kitchen_vagrant_exec(cmd)
+  vdirs = Dir['.kitchen/**/Vagrantfile'].map { |dir| File.dirname dir }
+  vdirs.each do |vd|
+    Dir.chdir(vd) do
+      sh "vagrant #{cmd}"
+    end
+  end
+end
+
 ## Tasks ported from the previous vagrant-berkshelf implementation
 
 desc 'kitchen destroy and cleanup'
@@ -20,8 +31,7 @@ end
 
 desc 'Halts the box'
 task :halt do
-  STDERR.puts 'https://github.com/test-kitchen/test-kitchen/issues/350'
-  exit 1
+  kitchen_vagrant_exec 'halt'
 end
 
 namespace 'install' do
@@ -42,9 +52,7 @@ task redo: [:clean, :provision, :ssh]
 
 desc 'Reloads the box'
 task :reload do
-  STDERR.puts 'https://github.com/test-kitchen/kitchen-vagrant/issues/69'
-  STDERR.puts 'https://github.com/test-kitchen/test-kitchen/issues/350'
-  exit 1
+  kitchen_vagrant_exec 'reload'
 end
 
 begin
@@ -72,6 +80,10 @@ task up: [:converge]
 
 desc 'kitchen converge'
 task converge: [:setup] do
+  unless Dir['.kitchen/**/Vagrantfile'].empty?
+    kitchen_vagrant_exec 'up'
+  end
+
   sh 'bundle exec kitchen converge'
 end
 
