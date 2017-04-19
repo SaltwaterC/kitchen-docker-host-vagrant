@@ -10,6 +10,7 @@ include_recipe 'yum-epel::default'
 pkg = %w(
   htop
   squid
+  bc
 )
 package pkg
 
@@ -40,4 +41,16 @@ end
   sysctl_param param do
     value 1
   end
+end
+
+cookbook_file '/etc/init.d/zram' do
+  source 'etc.init.d.zram'
+  owner 'root'
+  group 'root'
+  mode '0755'
+  notifies :restart, 'service[zram]', :delayed
+end
+
+service 'zram' do
+  action [:enable, :start]
 end

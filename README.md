@@ -23,7 +23,7 @@ Vagrant 1.9.2+ is required. The previous versions (up to 1.9) stopped working pr
 
 For starting the VM, simply issue a `rake up` command in the root directory of this project.
 
-By default, it uses 4 virtual cores and 8192 GB of RAM. Export VB_CPUS and / or VB_MEM environment variables with the desired values to customize.
+By default, it uses 4 virtual cores and 4096 GB of RAM and zram support. Export VB_CPUS and / or VB_MEM environment variables with the desired values to customize.
 
 The VM itself uses a host-only network adapter with the IP address 192.168.99.100. This makes it sort of a drop-in replacement for docker-machine. The Docker socket isn't TLS enabled though.
 

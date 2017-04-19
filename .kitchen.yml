@@ -7,7 +7,7 @@ driver:
   customize:
     name: kitchen-docker-host
     cpus: <%= ENV['VB_CPUS'] || 4 %>
-    memory: <%= ENV['VB_MEM'] || 8192 %>
+    memory: <%= ENV['VB_MEM'] || 4096 %>
     nictype1: virtio
     nictype2: virtio
 
