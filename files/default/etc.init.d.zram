@@ -23,7 +23,7 @@ start() {
     mem_total_kb=$(grep MemTotal /proc/meminfo | grep -E --only-matching '[[:digit:]]+')
 
     # we will only assign 75% of system memory to zram
-    mem_total_kb=$((mem_total_kb / 75 * 100))
+    mem_total_kb=$((mem_total_kb * 75 / 100))
 
     mem_total=$((mem_total_kb * 1024))
 
@@ -58,7 +58,7 @@ stop() {
 }
 
 status() {
-    ls /sys/block/zram* > /dev/null 2>&1 || exit 0
+    ls /sys/block/zram* > /dev/null 2>&1 || exit 1
     echo -e "-------zram Compression Stats-------"
     for i in /sys/block/zram*; do
         compr=$(< $i/compr_data_size)
