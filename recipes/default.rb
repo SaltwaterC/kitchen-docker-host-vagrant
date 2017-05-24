@@ -17,6 +17,7 @@ package pkg
 docker_service 'default' do
   host %w(tcp://0.0.0.0:2375)
   bip '172.17.42.1/16'
+  storage_driver 'devicemapper'
   action [:create, :start]
 end
 

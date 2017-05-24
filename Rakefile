@@ -80,10 +80,7 @@ task up: [:converge]
 
 desc 'kitchen converge'
 task converge: [:setup] do
-  unless Dir['.kitchen/**/Vagrantfile'].empty?
-    kitchen_vagrant_exec 'up'
-  end
-
+  kitchen_vagrant_exec 'up' unless Dir['.kitchen/**/Vagrantfile'].empty?
   sh 'bundle exec kitchen converge'
 end
 
