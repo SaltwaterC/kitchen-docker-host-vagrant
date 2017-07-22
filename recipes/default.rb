@@ -55,3 +55,5 @@ end
 service 'zram' do
   action [:enable, :start]
 end
+
+include_recipe 'selinux::disabled'
