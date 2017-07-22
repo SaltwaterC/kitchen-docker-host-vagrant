@@ -15,14 +15,14 @@ end
 
 desc 'kitchen destroy and cleanup'
 task :clean do
-  system 'bundle exec kitchen destroy'
+  system 'kitchen destroy'
   rm_rf '.kitchen'
   rm_f %w(Berksfile.lock Gemfile.lock)
 end
 
 desc 'Clears the Squid cache'
 task :clear do
-  sh 'bundle exec kitchen exec -c "sudo service squid stop && sleep 5 && '\
+  sh 'kitchen exec -c "sudo service squid stop && sleep 5 && '\
   'sudo rm -rf /var/spool/squid && '\
   'sudo mkdir /var/spool/squid && '\
   'sudo chown squid:squid /var/spool/squid && '\
@@ -40,7 +40,6 @@ namespace 'install' do
     sh 'brew cask install virtualbox'
     sh 'brew cask install vagrant'
     sh 'brew cask install chefdk'
-    Rake::Task[:setup].invoke
   end
 end
 
@@ -63,14 +62,9 @@ rescue LoadError
   STDERR.puts 'Rubocop, or one of its dependencies, is not available.'
 end
 
-desc 'Install dependencies'
-task :setup do
-  sh 'bundle install'
-end
-
 desc 'Login onto the box'
 task :ssh do
-  sh 'bundle exec kitchen login'
+  sh 'kitchen login'
 end
 
 desc 'Alias of converge'
@@ -79,14 +73,14 @@ task up: [:converge]
 ## Test Kitchen specific
 
 desc 'kitchen converge'
-task converge: [:setup] do
+task :converge do
   kitchen_vagrant_exec 'up' unless Dir['.kitchen/**/Vagrantfile'].empty?
-  sh 'bundle exec kitchen converge'
+  sh 'kitchen converge'
 end
 
 desc 'kitchen verify'
-task verify: [:setup] do
-  sh 'bundle exec kitchen verify'
+task :verify do
+  sh 'kitchen verify'
 end
 
 desc 'kitchen verify && rubocop && foodcritic'
@@ -94,5 +88,5 @@ task test: [:converge, :verify, :rubocop, :foodcritic]
 
 desc 'Runs foodcritic'
 task :foodcritic do
-  sh "bundle exec foodcritic --chef-version #{CHEF_VERSION} --progress --epic-fail any ."
+  sh "foodcritic --chef-version #{CHEF_VERSION} --progress --epic-fail any ."
 end
