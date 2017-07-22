@@ -90,3 +90,6 @@ desc 'Runs foodcritic'
 task :foodcritic do
   sh "foodcritic --chef-version #{CHEF_VERSION} --progress --epic-fail any ."
 end
+
+desc 'Runs static code analysis tools'
+task lint: [:rubocop, :foodcritic]
