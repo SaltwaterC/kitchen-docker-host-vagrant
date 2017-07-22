@@ -17,7 +17,7 @@ desc 'kitchen destroy and cleanup'
 task :clean do
   system 'kitchen destroy'
   rm_rf '.kitchen'
-  rm_f %w(Berksfile.lock Gemfile.lock)
+  rm_f %w[Berksfile.lock Gemfile.lock]
 end
 
 desc 'Clears the Squid cache'
@@ -44,10 +44,10 @@ namespace 'install' do
 end
 
 desc 'Alias of converge'
-task provision: [:converge]
+task provision: %i[converge]
 
 desc 'Recreates the machine from scratch and drops to a shell'
-task redo: [:clean, :provision, :ssh]
+task redo: %i[clean provision ssh]
 
 desc 'Reloads the box'
 task :reload do
@@ -68,7 +68,7 @@ task :ssh do
 end
 
 desc 'Alias of converge'
-task up: [:converge]
+task up: %i[converge]
 
 ## Test Kitchen specific
 
@@ -84,7 +84,7 @@ task :verify do
 end
 
 desc 'kitchen verify && rubocop && foodcritic'
-task test: [:converge, :verify, :rubocop, :foodcritic]
+task test: %i[converge verify rubocop foodcritic]
 
 desc 'Runs foodcritic'
 task :foodcritic do
@@ -92,4 +92,4 @@ task :foodcritic do
 end
 
 desc 'Runs static code analysis tools'
-task lint: [:rubocop, :foodcritic]
+task lint: %i[rubocop foodcritic]

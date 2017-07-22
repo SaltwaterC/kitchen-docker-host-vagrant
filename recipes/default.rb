@@ -7,18 +7,13 @@ end
 include_recipe 'sysctl::default'
 include_recipe 'yum-epel::default'
 
-pkg = %w(
-  htop
-  squid
-  bc
-)
-package pkg
+package %w[htop squid bc]
 
 docker_service 'default' do
-  host %w(tcp://0.0.0.0:2375)
+  host %w[tcp://0.0.0.0:2375]
   bip '172.17.42.1/16'
   storage_driver 'devicemapper'
-  action [:create, :start]
+  action %i[create start]
 end
 
 cookbook_file '/etc/squid/squid.conf' do
@@ -30,15 +25,15 @@ cookbook_file '/etc/squid/squid.conf' do
 end
 
 service 'squid' do
-  action [:enable, :start]
+  action %i[enable start]
 end
 
-%w(
+%w[
   net.ipv4.ip_forward
   net.ipv6.conf.all.forwarding
   net.bridge.bridge-nf-call-iptables
   net.bridge.bridge-nf-call-ip6tables
-).each do |param|
+].each do |param|
   sysctl_param param do
     value 1
   end
@@ -53,5 +48,5 @@ cookbook_file '/etc/init.d/zram' do
 end
 
 service 'zram' do
-  action [:enable, :start]
+  action %i[enable start]
 end

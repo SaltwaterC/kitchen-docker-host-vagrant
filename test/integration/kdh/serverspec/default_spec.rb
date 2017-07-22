@@ -1,10 +1,7 @@
 require_relative 'spec_helper'
 
 describe 'kitchen-docker-host::default' do
-  %w(
-    docker-ce
-    squid
-  ).each do |pkg|
+  %w[docker-ce squid].each do |pkg|
     describe package(pkg) do
       it { is_expected.to be_installed }
     end
@@ -33,10 +30,7 @@ describe 'kitchen-docker-host::default' do
     it { is_expected.to contain 'http_port 3128' }
   end
 
-  %w(
-    docker
-    squid
-  ).each do |srv|
+  %w[docker squid].each do |srv|
     describe service(srv) do
       it { is_expected.to be_enabled }
       it { is_expected.to be_running }
