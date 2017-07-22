@@ -144,7 +144,7 @@ Example:
 driver:
   name: docker
   provision_command:
-    - curl -L http://www.opscode.com/chef/install.sh -o /tmp/install.sh && bash /tmp/install.sh -v 12.18.31
+    - curl -L http://www.opscode.com/chef/install.sh -o /tmp/install.sh && bash /tmp/install.sh -v 13.2.20
 
 provisioner:
   name: chef_zero
@@ -186,7 +186,7 @@ Example:
 ```yml
 driver:
   name: docker
-  chef_version: 12.18.31
+  chef_version: 13.2.20
 
 platforms:
 - name: centos-6.8

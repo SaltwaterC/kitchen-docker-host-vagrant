@@ -1,1 +1,1 @@
-CHEF_VERSION = '12.18.31'.freeze
+CHEF_VERSION = '13.2.20'.freeze
