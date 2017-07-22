@@ -8,7 +8,7 @@ All the required gems are supplied by ChefDK.
 
 ## Dependencies
 
- * [ChefDK](https://downloads.chef.io/chef-dk/)
+ * [ChefDK](https://downloads.chef.io/chef-dk/) 2+
  * [VirtualBox](https://www.virtualbox.org)
  * [Vagrant](https://www.vagrantup.com) 1.9.2+
  * [Docker](https://www.docker.com) client
