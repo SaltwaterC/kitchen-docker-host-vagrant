@@ -2,7 +2,7 @@ require_relative 'spec_helper'
 
 describe 'kitchen-docker-host::default' do
   %w(
-    docker-engine
+    docker-ce
     squid
   ).each do |pkg|
     describe package(pkg) do
