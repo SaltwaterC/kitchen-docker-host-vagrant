@@ -10,7 +10,7 @@ issues_url 'https://git.io/vrMEj'
 chef_version '>= 12'
 supports 'centos'
 
-depends 'docker', '= 2.15.6'
+depends 'docker', '= 2.15.14'
 depends 'sysctl', '= 0.9.0'
 depends 'selinux', '= 2.0.3'
 depends 'yum-epel', '= 2.1.1'
