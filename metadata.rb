@@ -8,7 +8,7 @@ version '0.3.1'
 source_url 'https://git.io/vrMEH'
 issues_url 'https://git.io/vrMEj'
 
-depends 'docker', '= 2.15.6'
+depends 'docker', '= 2.15.14'
 depends 'sysctl', '= 0.9.0'
 depends 'selinux', '= 2.0.3'
 depends 'yum-epel', '= 2.1.1'
