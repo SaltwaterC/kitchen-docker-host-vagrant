@@ -13,6 +13,7 @@ docker_service 'default' do
   host %w[tcp://0.0.0.0:2375]
   bip '172.17.42.1/16'
   storage_driver 'devicemapper'
+  storage_opts %w[dm.basesize=20G]
   action %i[create start]
 end
 
