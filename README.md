@@ -15,10 +15,6 @@ All the required gems are supplied by ChefDK.
  * [Vagrant](https://www.vagrantup.com) 1.9.2+
  * [Docker](https://www.docker.com) client
 
-```bash
-rake setup
-```
-
 Vagrant 1.9.2+ is required. The previous versions (up to 1.9) stopped working properly with Atlas.
 
 ## How to use
