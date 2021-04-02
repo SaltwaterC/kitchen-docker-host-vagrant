@@ -1,7 +1,5 @@
 ## About
 
-This branch uses VirtualBox which is the cross platform implementation. For a macOS / OS X specific implementation using Veertu, please checkout the [veertu](https://github.com/SaltwaterC/kitchen-docker-host-vagrant/tree/veertu) branch.
-
 Docker host as Vagrant box created with [kitchen-docker](https://github.com/portertech/kitchen-docker) in mind. Provides a Docker host and Squid as caching proxy. It doesn't have anything [Test Kitchen](http://kitchen.ci) specific per-se, but it provides a consistent development environment. This document also contains a list of speed hacks to make Test Kitchen a lot more faster compared to its defaults.
 
 The machine is also implemented using Test Kitchen using the kitchen-vagrant driver. It used to be implemented with Vagrant and vagrant-berkshelf, however, vagrant-berkshelf has the bad habit of breaking quite often.
