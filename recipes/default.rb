@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 # kitchen-docker-host::default
 
 package 'postfix' do
   action :remove
 end
 
-include_recipe 'sysctl::default'
 include_recipe 'yum-epel::default'
 
 package %w[htop squid bc]
@@ -35,7 +36,7 @@ end
   net.bridge.bridge-nf-call-iptables
   net.bridge.bridge-nf-call-ip6tables
 ].each do |param|
-  sysctl_param param do
+  sysctl param do
     value 1
     notifies :restart, 'service[docker]', :delayed
   end
@@ -63,3 +64,9 @@ service 'docker' do
 end
 
 include_recipe 'selinux::disabled'
+
+# allow test-kitchen busser to continue working as if this is Chef
+link '/opt/chef' do
+  to '/opt/cinc'
+  not_if { ::File.exist? '/opt/chef' }
+end

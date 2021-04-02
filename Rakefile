@@ -1,4 +1,6 @@
-require_relative 'chef_version'
+# frozen_string_literal: true
+
+require_relative 'cinc_version'
 
 # workaround for https://github.com/test-kitchen/kitchen-vagrant/issues/69
 # and https://github.com/test-kitchen/test-kitchen/issues/350
@@ -54,14 +56,6 @@ task :reload do
   kitchen_vagrant_exec 'reload'
 end
 
-begin
-  # Rubocop stuff
-  require 'rubocop/rake_task'
-  RuboCop::RakeTask.new
-rescue LoadError
-  STDERR.puts 'Rubocop, or one of its dependencies, is not available.'
-end
-
 desc 'Login onto the box'
 task :ssh do
   sh 'kitchen login'
@@ -83,13 +77,13 @@ task :verify do
   sh 'kitchen verify'
 end
 
-desc 'kitchen verify && rubocop && foodcritic'
-task test: %i[converge verify rubocop foodcritic]
+desc 'kitchen verify && cookstyle'
+task test: %i[converge verify cookstyle]
 
-desc 'Runs foodcritic'
-task :foodcritic do
-  sh "foodcritic --chef-version #{CHEF_VERSION} --progress --epic-fail any ."
+desc 'Runs cookstyle'
+task :cookstyle do
+  sh 'cookstyle'
 end
 
 desc 'Runs static code analysis tools'
-task lint: %i[rubocop foodcritic]
+task lint: %i[cookstyle]

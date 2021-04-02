@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'spec_helper'
 
 describe 'kitchen-docker-host::default' do
@@ -14,8 +16,11 @@ describe 'kitchen-docker-host::default' do
     it { is_expected.to be_mode '644' }
 
     it do
-      is_expected.to contain 'ExecStart=/usr/bin/dockerd  '\
-      '--bip=172.17.42.1/16 -H tcp://0.0.0.0:2375 --pidfile=/var/run/docker.pid'
+      is_expected.to contain 'ExecStart=/usr/bin/dockerd  --bip=172.17.42.1/16'\
+        ' --group=docker --host tcp://0.0.0.0:2375 '\
+        '--pidfile=/var/run/docker.pid --storage-driver=devicemapper '\
+        '--storage-opt=dm.basesize=20G '\
+        '--containerd=/run/containerd/containerd.sock'
     end
   end
 

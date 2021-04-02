@@ -1,8 +1,15 @@
-Metrics/LineLength:
+Layout/LineLength:
   Max: 130
 
 Metrics/BlockLength:
   Max: 40
 
-Bundler/OrderedGems:
-  Enabled: false
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    default: '[]'
+    '%i': '[]'
+    '%w': '[]'
+
+AllCops:
+  NewCops: enable
+  TargetChefVersion: 16.11

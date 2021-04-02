@@ -1,16 +1,16 @@
+# frozen_string_literal: true
+
 name 'kitchen-docker-host'
 maintainer 'Stefan Rusu'
 maintainer_email 'saltwaterc@gmail.com'
 license 'MIT'
 description 'Installs/Configures kitchen-docker-host'
-long_description 'Installs/Configures kitchen-docker-host'
-version '0.3.1'
+version '0.4.0'
 source_url 'https://git.io/vrMEH'
 issues_url 'https://git.io/vrMEj'
-chef_version '>= 12'
+chef_version '>= 16'
 supports 'centos'
 
-depends 'docker', '= 2.15.14'
-depends 'sysctl', '= 0.9.0'
-depends 'selinux', '= 2.0.3'
-depends 'yum-epel', '= 2.1.1'
+depends 'docker', '= 7.7.0'
+depends 'selinux', '= 3.1.1'
+depends 'yum-epel', '= 4.1.1'

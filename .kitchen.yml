@@ -1,4 +1,4 @@
-# <% require_relative 'chef_version' %>
+# <% require_relative 'cinc_version' %>
 
 driver:
   name: vagrant
@@ -6,17 +6,18 @@ driver:
   - ['private_network', {ip: '192.168.99.100'}]
   customize:
     name: kitchen-docker-host
-    cpus: <%= ENV['VB_CPUS'] || 4 %>
+    cpus: <%= ENV['VB_CPUS'] || 2 %>
     memory: <%= ENV['VB_MEM'] || 4096 %>
     nictype1: virtio
     nictype2: virtio
 
 provisioner:
   name: chef_zero
-  require_chef_omnibus: <%= CHEF_VERSION %>
+  product_name: cinc
+  product_version: <%= CINC_VERSION %>
 
 platforms:
-- name: centos-7.4
+- name: generic/oracle8
 
 suites:
 - name: kdh

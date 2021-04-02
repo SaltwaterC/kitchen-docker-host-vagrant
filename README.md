@@ -6,22 +6,20 @@ Docker host as Vagrant box created with [kitchen-docker](https://github.com/port
 
 The machine is also implemented using Test Kitchen using the kitchen-vagrant driver. It used to be implemented with Vagrant and vagrant-berkshelf, however, vagrant-berkshelf has the bad habit of breaking quite often.
 
-All the required gems are supplied by ChefDK.
+All the required gems are supplied by CINC Workstation (i.e a free distribution of Chef Workstation without the corporate nonsense).
 
 ## Dependencies
 
- * [ChefDK](https://downloads.chef.io/chef-dk/) 2+
- * [VirtualBox](https://www.virtualbox.org)
- * [Vagrant](https://www.vagrantup.com) 1.9.2+
- * [Docker](https://www.docker.com) client
-
-Vagrant 1.9.2+ is required. The previous versions (up to 1.9) stopped working properly with Atlas.
+ * [CINC Workstation](https://cinc.osuosl.org/files/unstable/cinc-workstation/) 21.3.346
+ * [VirtualBox](https://www.virtualbox.org) 6.1+
+ * [Vagrant](https://www.vagrantup.com) 2.2.15+
+ * [Docker](https://www.docker.com) 20.10+
 
 ## How to use
 
 For starting the VM, simply issue a `rake up` command in the root directory of this project.
 
-By default, it uses 4 virtual cores and 4096 GB of RAM and zram support. Export VB_CPUS and / or VB_MEM environment variables with the desired values to customize.
+By default, it uses 2 virtual cores and 4096 GB of RAM and zram support. Export VB_CPUS and / or VB_MEM environment variables with the desired values to customize.
 
 The VM itself uses a host-only network adapter with the IP address 192.168.99.100. This makes it sort of a drop-in replacement for docker-machine. The Docker socket isn't TLS enabled though.
 
@@ -34,46 +32,74 @@ export DOCKER_HOST=tcp://192.168.99.100:2375
 To check whether the Docker connection is OK:
 
 ```bash
-Containers: 0
- Running: 0
- Paused: 0
- Stopped: 0
-Images: 0
-Server Version: 17.03.0-ce
-Storage Driver: overlay
- Backing Filesystem: xfs
- Supports d_type: true
-Logging Driver: json-file
-Cgroup Driver: cgroupfs
-Plugins:
- Volume: local
- Network: bridge host macvlan null overlay
-Swarm: inactive
-Runtimes: runc
-Default Runtime: runc
-Init Binary: docker-init
-containerd version: 977c511eda0925a723debdc94d09459af49d082a
-runc version: a01dafd48bc1c7cc12bdb01206f9fea7dd6feb70
-init version: 949e6fa
-Security Options:
- seccomp
-  Profile: default
-Kernel Version: 3.10.0-514.el7.x86_64
-Operating System: CentOS Linux 7 (Core)
-OSType: linux
-Architecture: x86_64
-CPUs: 4
-Total Memory: 3.702 GiB
-Name: kdh-centos-73.vagrantup.com
-ID: LZCX:SICI:GNYY:AWXN:DTE3:WMBT:DHQ4:6FZB:BULH:M7EJ:WPVZ:CDUA
-Docker Root Dir: /var/lib/docker
-Debug Mode (client): false
-Debug Mode (server): false
-Registry: https://index.docker.io/v1/
-Experimental: false
-Insecure Registries:
- 127.0.0.0/8
-Live Restore Enabled: false
+Client:
+ Context:    default
+ Debug Mode: false
+ Plugins:
+  app: Docker App (Docker Inc., v0.9.1-beta3)
+  buildx: Build with BuildKit (Docker Inc., v0.5.1-docker)
+
+Server:
+ Containers: 0
+  Running: 0
+  Paused: 0
+  Stopped: 0
+ Images: 0
+ Server Version: 20.10.5
+ Storage Driver: devicemapper
+  Pool Name: docker-252:0-134938214-pool
+  Pool Blocksize: 65.54kB
+  Base Device Size: 21.47GB
+  Backing Filesystem: xfs
+  Udev Sync Supported: true
+  Data file: /dev/loop0
+  Metadata file: /dev/loop1
+  Data loop file: /var/lib/docker/devicemapper/devicemapper/data
+  Metadata loop file: /var/lib/docker/devicemapper/devicemapper/metadata
+  Data Space Used: 11.73MB
+  Data Space Total: 107.4GB
+  Data Space Available: 71.63GB
+  Metadata Space Used: 17.36MB
+  Metadata Space Total: 2.147GB
+  Metadata Space Available: 2.13GB
+  Thin Pool Minimum Free Space: 10.74GB
+  Deferred Removal Enabled: true
+  Deferred Deletion Enabled: true
+  Deferred Deleted Device Count: 0
+  Library Version: 1.02.171-RHEL8 (2020-05-28)
+ Logging Driver: json-file
+ Cgroup Driver: cgroupfs
+ Cgroup Version: 1
+ Plugins:
+  Volume: local
+  Network: bridge host ipvlan macvlan null overlay
+  Log: awslogs fluentd gcplogs gelf journald json-file local logentries splunk syslog
+ Swarm: inactive
+ Runtimes: io.containerd.runc.v2 io.containerd.runtime.v1.linux runc
+ Default Runtime: runc
+ Init Binary: docker-init
+ containerd version: 05f951a3781f4f2c1911b05e61c160e9c30eaa8e
+ runc version: 12644e614e25b05da6fd08a38ffa0cfe1903fdec
+ init version: de40ad0
+ Security Options:
+  seccomp
+   Profile: default
+ Kernel Version: 5.4.17-2036.104.5.el8uek.x86_64
+ Operating System: Oracle Linux Server 8.3
+ OSType: linux
+ Architecture: x86_64
+ CPUs: 2
+ Total Memory: 3.561GiB
+ Name: kdh-generic-oracle8.vagrantup.com
+ ID: NZHB:L2GI:ZOFQ:L7A4:G5BF:X4PJ:ADTJ:VHRW:SD4D:US6T:UVXK:LDY6
+ Docker Root Dir: /var/lib/docker
+ Debug Mode: false
+ Registry: https://index.docker.io/v1/
+ Labels:
+ Experimental: false
+ Insecure Registries:
+  127.0.0.0/8
+ Live Restore Enabled: false
 ```
 
 To use it with Test Kitchen, you need to install the kitchen-docker gem and to specify docker as Kitchen driver.
@@ -192,7 +218,7 @@ platforms:
     dockerfile: "../centos-6.8"
 ```
 
-For a development machine, I use Docker in a VM even for a host that supports it natively, therefore the SSH inside the container *is* a hard dependency. The reason for this statement is the fact that the volumes feature essentially provide [root access to the host](http://reventlov.com/advisories/using-the-docker-command-to-root-the-host) for all the users who have access to the Docker socket.
+For a development machine, I use Docker in a VM even for a host that supports it natively, therefore the SSH inside the container *is* a hard dependency. The reason for this statement is the fact that the volumes feature essentially provide [root access to the host](https://www.saltwaterc.eu/having-docker-socket-access-is-probably-not-a-great-idea.html) for all the users who have access to the Docker socket.
 
 ## Monkey-patching the docker driver
 
