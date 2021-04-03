@@ -1,9 +1,15 @@
-# <% require_relative 'cinc_version' %>
+<% require_relative 'cinc_version' %>
 
 driver:
   name: vagrant
   network:
   - ['private_network', {ip: '192.168.99.100'}]
+  <% if File.exist? 'volumes.yml' %>
+  synced_folders:
+  <% YAML.load_file('volumes.yml').each do |volume| %>
+  - ['<%= volume %>', '<%= volume %>']
+  <% end %>
+  <% end %>
   customize:
     name: kitchen-docker-host
     cpus: <%= ENV['VB_CPUS'] || 2 %>
@@ -17,7 +23,11 @@ provisioner:
   product_version: <%= CINC_VERSION %>
 
 platforms:
-- name: generic/oracle8
+- name: oracle8
+  driver:
+    box: generic/oracle8
+    box_auto_update: true
+    box_auto_prune: true
 
 suites:
 - name: kdh

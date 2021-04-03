@@ -19,6 +19,16 @@ For starting the VM, simply issue a `rake up` command in the root directory of t
 
 By default, it uses 2 virtual cores and 4096 GB of RAM and zram support. Export VB_CPUS and / or VB_MEM environment variables with the desired values to customize.
 
+To customised the sync folders, create a volumes.yml file containing an array of paths. For example:
+
+```yaml
+# volumes.yml
+- /foo/bar
+- /baz/qux
+```
+
+The paths on the host are mounted as sync folders in the VM on a 1:1 mapping (i.e the same paths are kept inside the VM). This allows using the Docker volumes feature as if the service is running locally, for as long as the path is declared in volumes.yml.
+
 The VM itself uses a host-only network adapter with the IP address 192.168.99.100. This makes it sort of a drop-in replacement for docker-machine. The Docker socket isn't TLS enabled though.
 
 To tell the Docker client where to find the host, simply:
