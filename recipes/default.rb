@@ -64,9 +64,3 @@ service 'docker' do
 end
 
 include_recipe 'selinux::disabled'
-
-# allow test-kitchen busser to continue working as if this is Chef
-link '/opt/chef' do
-  to '/opt/cinc'
-  not_if { ::File.exist? '/opt/chef' }
-end

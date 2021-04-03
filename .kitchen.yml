@@ -32,4 +32,5 @@ platforms:
 suites:
 - name: kdh
   run_list:
-  - recipe[kitchen-docker-host]
+  - recipe[kitchen-docker-host::test]
+  - recipe[kitchen-docker-host::default]
