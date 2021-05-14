@@ -1,3 +1,9 @@
+## 0.4.1
+---
+ * Use oracle-epel-release-el8 in place of epel cookbook.
+ * Ubuntu-style zram setup using systemd and init / end scripts.
+ * Reduce size of video RAM.
+
 ## 0.4.0
 ---
  * Migrante from CentOS 7 to Oracle Linux 8. CentOS 8 has been delivered as a stillborn child. Thanks Red Hat!

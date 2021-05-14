@@ -6,7 +6,7 @@ package 'postfix' do
   action :remove
 end
 
-include_recipe 'yum-epel::default'
+package 'oracle-epel-release-el8'
 
 package %w[htop squid bc]
 
@@ -19,7 +19,7 @@ docker_service 'default' do
 end
 
 cookbook_file '/etc/squid/squid.conf' do
-  source 'etc.squid.squid.conf'
+  source 'etc/squid/squid.conf'
   owner 'root'
   group 'root'
   mode '0644'
@@ -42,16 +42,34 @@ end
   end
 end
 
-cookbook_file '/etc/init.d/zram' do
-  source 'etc.init.d.zram'
-  owner 'root'
-  group 'root'
-  mode '0755'
-  notifies :restart, 'service[zram]', :delayed
+%w[init-zram-swapping end-zram-swapping].each do |zram_script|
+  cookbook_file "/usr/bin/#{zram_script}" do
+    source "usr/bin/#{zram_script}"
+    owner 'root'
+    group 'root'
+    mode '0755'
+    notifies :restart, 'systemd_unit[zram-config.service]', :delayed
+  end
 end
 
-service 'zram' do
-  action %i[enable start]
+systemd_unit 'zram-config.service' do
+  content(
+    {
+      'Unit' => {
+        'Description' => 'Initializes',
+      },
+      'Service' => {
+        'ExecStart' => '/usr/bin/init-zram-swapping',
+        'ExecStop' => '/usr/bin/end-zram-swapping',
+        'Type' => 'oneshot',
+        'RemainAfterExit' => 'true',
+      },
+      'Install' => {
+        'WantedBy' => 'multi-user.target',
+      },
+    }
+  )
+  action %i[create enable start]
 end
 
 service 'firewalld' do
