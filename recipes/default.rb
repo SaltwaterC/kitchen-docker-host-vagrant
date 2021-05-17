@@ -13,8 +13,7 @@ package %w[htop squid bc]
 docker_service 'default' do
   host %w[tcp://0.0.0.0:2375]
   bip '172.17.42.1/16'
-  storage_driver 'devicemapper'
-  storage_opts %w[dm.basesize=20G]
+  storage_driver 'overlay2'
   action %i[create start]
 end
 
