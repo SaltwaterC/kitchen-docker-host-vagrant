@@ -18,8 +18,7 @@ describe 'kitchen-docker-host::default' do
     it do
       is_expected.to contain 'ExecStart=/usr/bin/dockerd  --bip=172.17.42.1/16'\
         ' --group=docker --host tcp://0.0.0.0:2375 '\
-        '--pidfile=/var/run/docker.pid --storage-driver=devicemapper '\
-        '--storage-opt=dm.basesize=20G '\
+        '--pidfile=/var/run/docker.pid --storage-driver=overlay2 '\
         '--containerd=/run/containerd/containerd.sock'
     end
   end
