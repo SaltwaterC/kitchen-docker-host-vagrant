@@ -1,4 +1,6 @@
-## About
+## [DEPRECATED] About
+
+I can finally deprecate this as Docker finally released Docker Desktop for Linux. Also, Podman became more useful as well, making Docker a bit _redundant_.
 
 Docker host as Vagrant box created with [kitchen-docker](https://github.com/portertech/kitchen-docker) in mind. Provides a Docker host and Squid as caching proxy. It doesn't have anything [Test Kitchen](http://kitchen.ci) specific per-se, but it provides a consistent development environment. This document also contains a list of speed hacks to make Test Kitchen a lot more faster compared to its defaults.
 
